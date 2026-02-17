@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar & Log Masuk - Portal Jurnal Harian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      color: #2c3e50;
+    }
+    .container {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 420px;
+    }
+    h1, h2 { text-align: center; color: #2c3e50; margin-bottom: 1.5rem; }
+    .form-group { margin-bottom: 1.2rem; }
+    label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+    input {
+      width: 100%;
+      padding: 0.9rem;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+    input:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 0 3px rgba(52,152,219,0.15);
+    }
+    button {
+      width: 100%;
+      padding: 0.95rem;
+      margin: 0.6rem 0;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary { background: #3498db; color: white; }
+    .btn-primary:hover { background: #2980b9; }
+    .btn-google {
+      background: #4285f4;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-google:hover { background: #357ae8; }
+    .toggle-link {
+      text-align: center;
+      margin-top: 1rem;
+      color: #3498db;
+      cursor: pointer;
+    }
+    .toggle-link:hover { text-decoration: underline; }
+    .message {
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+    .success { background: #e8f5e9; color: #27ae60; }
+    .error { background: #ffebee; color: #c62828; }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: #7f8c8d;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ecf0f1;
+    }
+    .divider span { padding: 0 1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1 id="formTitle">Daftar Akaun Baru</h1>
+
+    <div id="message" class="message" style="display:none;"></div>
+
+    <form id="authForm">
+      <div class="form-group">
+        <label for="email">Emel</label>
+        <input type="email" id="email" placeholder="contoh@nama.com" required autocomplete="email"/>
+      </div>
+      <div class="form-group">
+        <label for="password">Kata Laluan</label>
+        <input type="password" id="password" placeholder="Minimum 6 aksara" required autocomplete="current-password"/>
+      </div>
+      <button type="submit" class="btn-primary" id="submitBtn">Daftar Akaun</button>
+    </form>
+
+    <div class="divider"><span>atau</span></div>
+
+    <button class="btn-google" id="googleBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.51h5.84c-.25 1.31-.98 2.42-2.07 3.16v2.63h3.35c1.96-1.81 3.09-4.46 3.09-7.25z"/><path fill="#4285F4" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.35-2.63c-.98.66-2.23 1.06-3.93 1.06-3.02 0-5.58-2.04-6.49-4.79H.96v2.67C2.64 20.29 6.98 23 12 23z"/><path fill="#34A853" d="M5.51 14.21c-.23-.66-.36-1.37-.36-2.21s.13-1.55.36-2.21V7.34H.96C.35 8.85 0 10.39 0 12s.35 3.15.96 4.66l4.55-2.45z"/><path fill="#FBBC05" d="M12 4.98c1.64 0 3.11.56 4.27 1.66l3.19-3.19C17.46 1.01 14.97 0 12 0 6.98 0 2.64 2.71.96 6.34l4.55 2.45C6.42 6.02 8.98 4.98 12 4.98z"/></svg>
+      Log Masuk dengan Google
+    </button>
+
+    <div class="toggle-link" id="toggleLink">Sudah ada akaun? Log masuk</div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      GoogleAuthProvider,
+      signInWithPopup,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD2bg7IeRz4bR7dMkTHJo9T_Macy16COpc",
+      authDomain: "jurnal-al-quran-6ca7c.firebaseapp.com",
+      projectId: "jurnal-al-quran-6ca7c",
+      storageBucket: "jurnal-al-quran-6ca7c.firebasestorage.app",
+      messagingSenderId: "175103376818",
+      appId: "1:175103376818:web:6978f520cf9084b06ab8ab",
+      measurementId: "G-6TZ2YDZYS1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    const form = document.getElementById('authForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const submitBtn = document.getElementById('submitBtn');
+    const formTitle = document.getElementById('formTitle');
+    const toggleLink = document.getElementById('toggleLink');
+    const messageDiv = document.getElementById('message');
+    const googleBtn = document.getElementById('googleBtn');
+
+    let isRegisterMode = true;
+
+    toggleLink.addEventListener('click', () => {
+      isRegisterMode = !isRegisterMode;
+      formTitle.textContent = isRegisterMode ? "Daftar Akaun Baru" : "Log Masuk";
+      submitBtn.textContent = isRegisterMode ? "Daftar Akaun" : "Log Masuk";
+      toggleLink.textContent = isRegisterMode ? "Sudah ada akaun? Log masuk" : "Belum ada akaun? Daftar sekarang";
+      messageDiv.style.display = 'none';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      messageDiv.style.display = 'none';
+      submitBtn.disabled = true;
+      submitBtn.textContent = isRegisterMode ? "Mendaftar..." : "Sedang log masuk...";
+
+      try {
+        let userCredential;
+        if (isRegisterMode) {
+          userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          showMessage(`Akaun berjaya didaftar! Selamat datang, ${userCredential.user.email}`, 'success');
+        } else {
+          userCredential = await signInWithEmailAndPassword(auth, email, password);
+          showMessage(`Log masuk berjaya!`, 'success');
+        }
+        setTimeout(() => window.location.href = "index.html", 1500);
+      } catch (error) {
+        let msg = error.message;
+        if (error.code === 'auth/email-already-in-use') msg = "Emel ini sudah didaftar.";
+        if (error.code === 'auth/invalid-email') msg = "Emel tidak sah.";
+        if (error.code === 'auth/weak-password') msg = "Kata laluan terlalu lemah (min 6 aksara).";
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') msg = "Emel atau kata laluan salah.";
+        showMessage(msg, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = isRegisterMode ? "Daftar Akaun" : "Log Masuk";
+      }
+    });
+
+    googleBtn.addEventListener('click', async () => {
+      try {
+        await signInWithPopup(auth, googleProvider);
+        showMessage("Log masuk Google berjaya!", 'success');
+        setTimeout(() => window.location.href = "index.html", 1500);
+      } catch (error) {
+        let msg = "Ralat log masuk Google.";
+        if (error.code === 'auth/popup-blocked') msg += " Popup diblok – benarkan popup atau cuba lagi.";
+        showMessage(msg + " (" + error.message + ")", 'error');
+      }
+    });
+
+    function showMessage(text, type) {
+      messageDiv.textContent = text;
+      messageDiv.className = 'message ' + type;
+      messageDiv.style.display = 'block';
+    }
+
+    // Jika sudah log masuk, redirect terus ke portal
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "index.html";
+      }
+    });
+  </script>
+</body>
+</html>
