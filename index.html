@@ -911,6 +911,29 @@ body.sidebar-open .sidebar {
     </div>
 
 <script>
+script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2bg7IeRz4bR7dMkTHJo9T_Macy16COpc",
+    authDomain: "jurnal-al-quran-6ca7c.firebaseapp.com",
+    projectId: "jurnal-al-quran-6ca7c",
+    storageBucket: "jurnal-al-quran-6ca7c.firebasestorage.app",
+    messagingSenderId: "175103376818",
+    appId: "1:175103376818:web:6978f520cf9084b06ab8ab",
+    measurementId: "G-6TZ2YDZYS1"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
         // Surah names in Indonesian
         const surahNames = [
             "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
@@ -994,14 +1017,18 @@ body.sidebar-open .sidebar {
         let currentAyat = null;
         let currentPickerDate = new Date(); // State for the custom date picker
 
-        // Initialize app
-        function init() {
-            // Check if user is logged in
-            const savedUser = localStorage.getItem('journalUser');
-            if (savedUser) {
-                currentUser = savedUser;
-                showApp();
-            }
+       // Gantikan semakan pengguna sedia ada di init()
+auth.onAuthStateChanged(user => {
+    if (user) {
+        currentUser = user.email.split('@')[0]; // Dapatkan username dari e-mel
+        showApp();
+        loadEntriesFromFirestore(); // Muat catatan dari Firestore
+    } else {
+        currentUser = null;
+        loginContainer.style.display = 'flex';
+        appContainer.style.display = 'none';
+    }
+});
 
             // Load journal entries
             const savedEntries = localStorage.getItem('journalEntries');
@@ -1386,32 +1413,31 @@ body.sidebar-open .sidebar {
             }
         }
 
-        // Login handler
-        function handleLogin(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple authentication
-            if (username === 'user' && password === 'password') {
-                currentUser = username;
-                localStorage.setItem('journalUser', username);
-                showApp();
-                loginError.style.display = 'none';
-            } else {
-                loginError.textContent = 'Username atau password salah. Sila cuba lagi.';
-                loginError.style.display = 'block';
-            }
-        }
+       // Gantikan fungsi handleLogin sedia ada
+async function handleLogin(e) {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    
+    try {
+        // Buat e-mel palsu jika hanya username diberikan
+        const email = `${username}@example.com`;
+        await auth.signInWithEmailAndPassword(email, password);
+        
+        // onAuthStateChanged akan mengendalikan baki logik
+        loginError.style.display = 'none';
+    } catch (error) {
+        loginError.textContent = 'Username atau password salah. ' + error.message;
+        loginError.style.display = 'block';
+    }
+}
 
-        // Logout handler
-        function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('journalUser');
-            loginContainer.style.display = 'flex';
-            appContainer.style.display = 'none';
-        }
+        // Gantikan fungsi handleLogout sedia ada
+function handleLogout() {
+    auth.signOut();
+    // onAuthStateChanged akan mengendalikan baki logik
+}
 
         // Show app after login
         function showApp() {
@@ -1423,51 +1449,61 @@ body.sidebar-open .sidebar {
             userAvatar.textContent = currentUser.charAt(0).toUpperCase();
         }
 
-        // Save journal entry
-        function saveJournalEntry(e) {
-            e.preventDefault();
-            
-            const title = journalTitle.value.trim();
-            const content = journalContent.value.trim();
-            const visibility = journalVisibility.value;
-            const selectedDate = datePicker.value;
-            
-            if (!title || !content) {
-                showNotification('Judul dan isi catatan tidak boleh kosong.', 'error');
-                return;
-            }
-            
-            const entryDate = new Date(selectedDate + 'T00:00:00');
-            const hijriDate = getHijriDate(entryDate);
-            
-            const entry = {
-                id: Date.now(),
-                title: title,
-                content: content,
-                date: entryDate.toISOString(),
-                hijriDate: hijriDate.hijriString,
-                visibility: visibility, // NEW: Add visibility
-                author: currentUser, // NEW: Add author
-                verse: currentVerse ? {
-                    text: currentVerse.text,
-                    translation: verseTranslation.textContent,
-                    reference: currentVerse.reference,
-                    correlation: currentVerse.correlation
-                } : null
-            };
-            
-            journalEntries.unshift(entry);
-            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-            
-            // Clear form
-            clearForm();
-            
-            // Display entries
-            displayEntries(visibility); // Display based on the entry's visibility
-            
-            // Show success message
-            showNotification('Catatan berjaya disimpan!', 'success');
-        }
+       // Fungsi untuk memuatkan semua catatan dari Firestore
+async function loadEntriesFromFirestore() {
+    const snapshot = await db.collection('entries').orderBy('date', 'desc').get();
+    journalEntries = snapshot.docs.map(doc => doc.data());
+    
+    // Paparkan entri untuk tab yang aktif
+    const activeTab = document.querySelector('.tab.active').dataset.tab;
+    displayEntries(activeTab === 'public' ? 'public' : 'private');
+}
+
+// Gantikan fungsi saveJournalEntry
+async function saveJournalEntry(e) {
+    e.preventDefault();
+    
+    // ... (kod untuk mendapatkan data dari form) ...
+    const title = journalTitle.value.trim();
+    const content = journalContent.value.trim();
+    const visibility = journalVisibility.value;
+    const selectedDate = datePicker.value;
+    
+    if (!title || !content) {
+        showNotification('Judul dan isi catatan tidak boleh kosong.', 'error');
+        return;
+    }
+
+    const entryDate = new Date(selectedDate + 'T00:00:00');
+    const hijriDate = getHijriDate(entryDate);
+    
+    const entry = {
+        // id: Date.now(), // Firestore akan hasilkan ID secara automatik
+        title: title,
+        content: content,
+        date: firebase.firestore.Timestamp.fromDate(entryDate), // Gunakan Timestamp
+        hijriDate: hijriDate.hijriString,
+        visibility: visibility,
+        author: currentUser,
+        verse: currentVerse ? { /* ... data ayat ... */ } : null
+    };
+
+    try {
+        // Simpan ke Firestore
+        await db.collection('entries').add(entry);
+        
+        // Muat semula senarai dari pangkalan data
+        await loadEntriesFromFirestore();
+
+        // Kosongkan form dan paparkan notifikasi
+        clearForm();
+        showNotification('Catatan berjaya disimpan!', 'success');
+    } catch (error) {
+        console.error("Error saving document: ", error);
+        showNotification('Gagal menyimpan catatan.', 'error');
+    }
+}
+
 
         // Show notification
         function showNotification(message, type) {
@@ -1605,20 +1641,34 @@ body.sidebar-open .sidebar {
             entryModal.classList.add('active');
         }
 
-        // Delete entry
-        function deleteEntry(id) {
-            if (confirm('Adakah anda pasti ingin memadam catatan ini?')) {
-                journalEntries = journalEntries.filter(e => e.id !== id);
-                localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-                // Re-display entries for the current active tab
-                const activeTab = document.querySelector('.tab.active').dataset.tab;
-                displayEntries(activeTab === 'public' ? 'public' : 'private');
-                showNotification('Catatan berjaya dipadam.', 'success');
-            }
-        }
+   // Gantikan fungsi deleteEntry
+async function deleteEntry(id) {
+    // Dalam Firestore, kita cari berdasarkan medan, bukan ID dokumen auto
+    // Lebih baik jika kita simpan ID dokumen. Untuk sekarang, kita cari.
+    const entryRef = db.collection('entries').where('id', '==', id);
+    const snapshot = await entryRef.get();
+
+    if (snapshot.empty) {
+        showNotification('Catatan tidak ditemui.', 'error');
+        return;
+    }
+
+    if (confirm('Adakah anda pasti ingin memadam catatan ini?')) {
+        const docId = snapshot.docs[0].id; // Dapatkan ID dokumen sebenar
+        await db.collection('entries').doc(docId).delete();
+        
+        // Muat semula senarai
+        await loadEntriesFromFirestore();
+        showNotification('Catatan berjaya dipadam.', 'success');
+    }
+}
 
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
     </script>
+<!-- Tambah sebelum </body> -->
+<script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 </body>
 </html>
