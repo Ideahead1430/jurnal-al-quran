@@ -2,232 +2,315 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Jurnal Harian & Rujukan Rububiyah</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Portal Jurnal Harian</title>
     <style>
-        /* General Styles */
+        /* Mobile-First Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #f9f9f9;
+            --white: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #ecf0f1;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Container */
         .container {
-            width: 100%;
-            max-width: 1200px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                max-width: 1200px;
+                padding: 0 20px;
+            }
+        }
+
+        /* Login Container */
+        .login-container {
             display: flex;
             flex-direction: column;
-            max-height: 95vh;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .login-form {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(0);
+            transition: var(--transition);
+        }
+
+        .login-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+        .login-container h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+            font-size: 28px;
         }
 
         /* Header */
         .header {
-            background: linear-gradient(90deg, #2c3e50, #3498db);
-            color: white;
-            padding: 20px 30px;
+            background: var(--white);
+            padding: 15px 0;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
 
         .header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 24px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .user-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #3498db;
+            background: var(--secondary-color);
+            color: var(--white);
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 18px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
         }
 
-        .btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-
-        .btn:hover {
-            background: #c0392b;
-        }
-
-        .btn-secondary {
-            background: #95a5a6;
-        }
-
-        .btn-secondary:hover {
-            background: #7f8c8d;
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
         }
 
         /* Main Content */
         .main-content {
             display: flex;
-            flex: 1;
-            overflow: hidden;
+            flex-direction: column;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        @media (min-width: 992px) {
+            .main-content {
+                flex-direction: row;
+            }
         }
 
         /* Sidebar */
         .sidebar {
-            width: 300px;
-            background: #f8f9fa;
-            padding: 30px 20px;
-            border-right: 1px solid #dee2e6;
-            overflow-y: auto;
-        }
-
-        .date-display {
-            background: #2c3e50;
-            color: white;
+            background: var(--white);
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        @media (min-width: 992px) {
+            .sidebar {
+                width: 300px;
+                position: sticky;
+                top: 100px;
+                height: fit-content;
+            }
+        }
+
+        /* Date Display */
+        .date-display {
             text-align: center;
-            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            color: var(--white);
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
         }
 
-        .date-display .hijri-date {
-            font-size: 2.5rem;
+        .date-display:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hijri-day {
+            font-size: 36px;
             font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .date-display .hijri-month {
-            font-size: 1.2rem;
             margin-bottom: 5px;
         }
 
-        .date-display .hijri-day-name {
-            font-size: 1rem;
-            opacity: 0.8;
+        .hijri-month {
+            font-size: 18px;
+            margin-bottom: 5px;
         }
 
+        .hijri-day-name {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Verse Box */
         .verse-box {
-            background: white;
-            border: 1px solid #dee2e6;
-            border-radius: 12px;
             padding: 20px;
-            margin-bottom: 25px;
+            background: var(--light-bg);
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary-color);
+            transition: var(--transition);
         }
 
-        .verse-box h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.1rem;
+        .verse-box:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateX(5px);
         }
 
         .verse-text {
-            font-size: 1.3rem;
-            line-height: 2;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: var(--primary-color);
             text-align: right;
-            font-family: 'Traditional Arabic', 'Arial', sans-serif;
-            margin-bottom: 15px;
-            color: #111;
+            line-height: 1.8;
         }
 
         .verse-translation {
             font-style: italic;
-            color: #555;
-            margin-bottom: 15px;
-            text-align: left;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
         }
 
         .verse-reference {
             text-align: right;
-            font-size: 0.9rem;
-            color: #3498db;
-            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
         }
 
         .verse-correlation {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px dashed #ddd;
-            font-size: 0.85rem;
-            color: #666;
+            font-size: 12px;
+            color: var(--warning-color);
+            padding-top: 10px;
+            border-top: 1px solid var(--border-color);
         }
 
         /* Content Area */
         .content-area {
             flex: 1;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            background: var(--white);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            animation: slideInRight 0.6s ease-out;
         }
 
+        /* Tabs */
         .tabs {
             display: flex;
-            border-bottom: 2px solid #dee2e6;
+            gap: 10px;
             margin-bottom: 25px;
+            border-bottom: 2px solid var(--border-color);
+            overflow-x: auto;
+            padding-bottom: 2px;
         }
 
         .tab {
-            padding: 12px 24px;
-            background: none;
+            padding: 12px 20px;
+            background: transparent;
             border: none;
+            color: var(--text-secondary);
+            font-size: 16px;
             cursor: pointer;
-            font-size: 1rem;
-            color: #6c757d;
-            transition: all 0.3s;
-            border-bottom: 3px solid transparent;
+            position: relative;
+            transition: var(--transition);
+            white-space: nowrap;
+            font-weight: 500;
+        }
+
+        .tab:hover {
+            color: var(--secondary-color);
         }
 
         .tab.active {
-            color: #3498db;
-            border-bottom-color: #3498db;
-            font-weight: 600;
+            color: var(--secondary-color);
         }
 
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--secondary-color);
+            animation: slideIn 0.3s ease-out;
+        }
+
+        /* Tab Content */
         .tab-content {
             display: none;
-            flex-direction: column;
-            overflow-y: auto;
-            flex: 1;
+            animation: fadeIn 0.4s ease-out;
         }
 
         .tab-content.active {
-            display: flex;
+            display: block;
         }
 
-        /* Journal Form */
-        .journal-form {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-        }
-
+        /* Form Styles */
         .form-group {
             margin-bottom: 20px;
         }
@@ -235,35 +318,175 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #495057;
+            font-weight: 500;
+            color: var(--text-primary);
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-control {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ced4da;
+            padding: 12px 15px;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--white);
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .form-control:focus {
             outline: none;
-            border-color: #3498db;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
         }
 
-        .form-group textarea {
+        textarea.form-control {
             resize: vertical;
-            min-height: 150px;
+            min-height: 120px;
         }
 
+        /* Date Picker Custom */
+        .date-picker-container {
+            position: relative;
+        }
+
+        .date-display-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .date-display-input:hover {
+            border-color: var(--secondary-color);
+            background: var(--white);
+        }
+
+        .date-display-text {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gregorian-date {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .hijri-date-display {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        /* Privacy Dropdown */
+        .privacy-dropdown {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: var(--light-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .privacy-dropdown:hover {
+            border-color: var(--secondary-color);
+            background: var(--white);
+        }
+
+        .privacy-icon {
+            font-size: 20px;
+        }
+
+        .privacy-text {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .privacy-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .privacy-badge.public {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+
+        .privacy-badge.private {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            background: var(--secondary-color);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: #6c7a89;
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-nav {
+            padding: 10px 20px;
+            background: var(--light-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: var(--white);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
+        }
+
+        .btn-nav:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Form Actions */
         .form-actions {
             display: flex;
             gap: 10px;
-            justify-content: flex-end;
+            margin-top: 25px;
+            flex-wrap: wrap;
         }
 
         /* Entries */
@@ -272,306 +495,667 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .entry-count {
-            color: #6c757d;
-            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-size: 14px;
         }
 
         .entries-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 15px;
         }
 
         .entry-card {
-            background: white;
-            border: 1px solid #dee2e6;
+            background: var(--white);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: var(--transition);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .entry-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--secondary-color);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
         }
 
         .entry-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+            border-color: var(--secondary-color);
+        }
+
+        .entry-card:hover::before {
+            transform: scaleY(1);
         }
 
         .entry-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            color: #6c757d;
-            font-size: 0.85rem;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .entry-date {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .entry-privacy {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .entry-privacy.public {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+        }
+
+        .entry-privacy.private {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+        }
+
+        .entry-actions {
+            display: flex;
+            gap: 8px;
         }
 
         .entry-actions button {
-            background: none;
-            border: none;
-            color: #3498db;
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.85rem;
-            margin-left: 10px;
+            transition: var(--transition);
+            font-size: 14px;
         }
 
         .entry-actions button:hover {
-            text-decoration: underline;
+            background: var(--light-bg);
+            border-color: var(--secondary-color);
+            color: var(--secondary-color);
         }
 
         .entry-card h4 {
             margin-bottom: 10px;
-            color: #2c3e50;
+            color: var(--primary-color);
+            font-size: 18px;
         }
 
         .entry-content {
-            color: #555;
+            color: var(--text-primary);
             line-height: 1.6;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .entry-verse {
-            background: #eef2f7;
-            padding: 10px;
+            background: var(--light-bg);
+            padding: 12px;
             border-radius: 8px;
-            font-size: 0.85rem;
-            color: #34495e;
+            margin-top: 10px;
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
 
         /* Modal */
         .modal {
             display: none;
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            justify-content: center;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
             align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .modal-content {
-            background-color: white;
-            padding: 0;
-            border-radius: 12px;
-            width: 90%;
+            background: var(--white);
+            border-radius: 16px;
             max-width: 600px;
-            max-height: 80vh;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            color: var(--primary-color);
+            font-size: 20px;
+        }
+
+        .close-modal {
+            background: transparent;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            background: var(--light-bg);
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        /* Quran Controls */
+        .quran-controls {
+            background: var(--light-bg);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .quran-controls h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 576px) {
+            .control-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .control-group {
             display: flex;
             flex-direction: column;
         }
 
-        .modal-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: #2c3e50;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #aaa;
-        }
-
-        .close-modal:hover {
-            color: #333;
-        }
-
-        .modal-body {
-            padding: 25px;
-            overflow-y: auto;
-        }
-
-        /* Login */
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        .login-container h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-        }
-
-        .login-form .form-group {
-            margin-bottom: 20px;
-        }
-
-        .login-form .form-actions {
-            justify-content: center;
-        }
-
-        .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        /* Quran Tab Styles */
-        .quran-controls {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-        }
-
-        .control-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .control-group {
-            flex: 1;
-        }
-
         .quran-nav {
             display: flex;
-            justify-content: space-between;
             gap: 10px;
             margin-top: 15px;
         }
 
-        .btn-nav {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-            flex: 1;
-        }
-
-        .btn-nav:hover:not(:disabled) {
-            background: #2980b9;
-        }
-
-        .btn-nav:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-        }
-
         .quran-display {
-            background: white;
-            border: 1px solid #dee2e6;
+            background: var(--white);
+            padding: 20px;
             border-radius: 12px;
-            padding: 25px;
-            overflow-y: auto;
-            flex: 1;
+            border: 2px solid var(--border-color);
+            min-height: 200px;
         }
 
         .ayat-box {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .surah-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        .ayat-box .surah-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-
-        .ayat-box .arabic {
-            font-size: 2rem;
-            line-height: 2.5;
+        .arabic {
+            font-size: 24px;
+            text-align: right;
+            line-height: 2;
+            margin: 20px 0;
+            color: var(--primary-color);
             font-family: 'Traditional Arabic', 'Arial', sans-serif;
-            margin-bottom: 25px;
         }
 
-        .ayat-box .terjemahan {
+        .terjemahan {
             font-style: italic;
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 25px;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.6;
         }
 
         .ayat-actions {
             display: flex;
-            justify-content: center;
-            gap: 15px;
+            gap: 10px;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
-        .btn-small {
-            background: #2ecc71;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
-        }
-
-        .btn-copy:hover {
-            background: #27ae60;
-        }
-
-        .btn-add-journal {
-            background: #f39c12;
-        }
-
-        .btn-add-journal:hover {
-            background: #e67e22;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: #95a5a6;
-        }
-
-        .empty-state svg {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 15px;
-            opacity: 0.5;
-        }
-
+        /* Loading */
         .loading {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 40px;
-            color: #6c757d;
+            color: var(--text-secondary);
         }
 
         .loading-spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
             width: 40px;
             height: 40px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
         }
 
+        /* Error Message */
+        .error-message {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--accent-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent-color);
+            display: none;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: rgba(39, 174, 96, 0.1);
+            color: var(--success-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--success-color);
+            display: none;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: var(--white);
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideInRight 0.3s ease-out;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: calc(100% - 40px);
+        }
+
+        .notification.success {
+            background: var(--success-color);
+        }
+
+        .notification.error {
+            background: var(--accent-color);
+        }
+
+        .notification.info {
+            background: var(--secondary-color);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Touch-friendly for mobile */
+        @media (hover: none) {
+            .btn:active {
+                transform: scale(0.95);
+            }
+            
+            .entry-card:active {
+                transform: scale(0.98);
+            }
+        }
+
+        /* Public Entries Section */
+        .public-entries-header {
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: var(--white);
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            margin: 20px -20px 0 -20px;
+        }
+
+        .public-entries-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+        }
+
+        .public-entries-container {
+            margin-top: 20px;
+        }
+
+        .public-entry-card {
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .public-entry-card::after {
+            content: 'PUBLIC';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--success-color);
+            color: var(--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .public-entry-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+
+        .public-entry-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .author-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .author-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .author-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Date Picker Modal */
+        .date-picker-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .date-picker-content {
+            background: var(--white);
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .date-picker-header {
+            padding: 20px;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date-picker-body {
+            padding: 20px;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 15px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .calendar-day:hover {
+            background: var(--light-bg);
+        }
+
+        .calendar-day.selected {
+            background: var(--secondary-color);
+            color: var(--white);
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--secondary-color);
+        }
+
+        .calendar-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .calendar-header-day {
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .date-picker-footer {
+            padding: 15px 20px;
+            border-top: 2px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .hijri-date-preview {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Privacy Dropdown Menu */
+        .privacy-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-top: 5px;
+            box-shadow: var(--shadow-lg);
+            z-index: 100;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .privacy-dropdown-menu.show {
+            display: block;
+        }
+
+        .privacy-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .privacy-option:hover {
+            background: var(--light-bg);
+        }
+
+        .privacy-option:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .privacy-option:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .privacy-option.selected {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
         }
     </style>
 </head>
@@ -584,14 +1168,14 @@
             <div class="error-message" id="loginError"></div>
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" value="user" required>
+                <input type="text" id="username" class="form-control" value="user" required>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" value="password" required>
+                <input type="password" id="password" class="form-control" value="password" required>
             </div>
             <div class="form-actions">
-                <button type="submit" class="btn">Log Masuk</button>
+                <button type="submit" class="btn" style="width: 100%;">Log Masuk</button>
             </div>
         </form>
     </div>
@@ -600,11 +1184,22 @@
     <div class="container" id="appContainer" style="display: none;">
         <!-- Header -->
         <header class="header">
-            <h1>Portal Jurnal Harian</h1>
-            <div class="user-info">
-                <span id="userDisplay">User</span>
-                <div class="user-avatar" id="userAvatar">U</div>
-                <button class="btn" id="logoutBtn">Log Keluar</button>
+            <div class="header-content">
+                <h1>
+                    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Portal Jurnal Harian
+                </h1>
+                <div class="user-info">
+                    <span id="userDisplay">User</span>
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <button class="btn btn-small" id="logoutBtn">Log Keluar</button>
+                </div>
             </div>
         </header>
 
@@ -614,7 +1209,7 @@
             <aside class="sidebar">
                 <!-- Date Display -->
                 <div class="date-display">
-                    <div class="hijri-date" id="hijriDay">--</div>
+                    <div class="hijri-day" id="hijriDay">--</div>
                     <div class="hijri-month" id="hijriMonth">------</div>
                     <div class="hijri-day-name" id="hijriDayName">---------</div>
                 </div>
@@ -633,7 +1228,8 @@
             <main class="content-area">
                 <!-- Tabs -->
                 <div class="tabs">
-                    <button class="tab active" data-tab="journal">Jurnal</button>
+                    <button class="tab active" data-tab="journal">Jurnal Saya</button>
+                    <button class="tab" data-tab="public">Catatan Umum</button>
                     <button class="tab" data-tab="quran">Al-Quran</button>
                 </div>
 
@@ -643,17 +1239,55 @@
                     <div class="journal-form">
                         <form id="journalForm">
                             <div class="form-group">
-                                <label for="datePicker">Pilih Tarikh</label>
-                                <input type="date" id="datePicker" required>
+                                <label>Pilih Tarikh</label>
+                                <div class="date-picker-container">
+                                    <div class="date-display-input" id="dateDisplayInput">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                        <div class="date-display-text">
+                                            <div class="gregorian-date" id="gregorianDate">--</div>
+                                            <div class="hijri-date-display" id="hijriDateDisplay">--</div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="datePicker" required>
+                                </div>
                             </div>
+                            
                             <div class="form-group">
-                                <label for="journalTitle">Tajuk Catatan</label>
-                                <input type="text" id="journalTitle" placeholder="Masukkan tajuk catatan..." required>
+                                <label>Tajuk Catatan</label>
+                                <input type="text" id="journalTitle" class="form-control" placeholder="Masukkan tajuk catatan..." required>
                             </div>
+                            
+                            <div class="form-group">
+                                <label>Privasi Catatan</label>
+                                <div class="privacy-dropdown" id="privacyDropdown">
+                                    <span class="privacy-icon" id="privacyIcon">🔒</span>
+                                    <span class="privacy-text" id="privacyText">Peribadi</span>
+                                    <span class="privacy-badge private" id="privacyBadge">PRIVATE</span>
+                                </div>
+                                <div class="privacy-dropdown-menu" id="privacyMenu">
+                                    <div class="privacy-option" data-privacy="private">
+                                        <span>🔒</span>
+                                        <span>Peribadi</span>
+                                        <span style="margin-left: auto;">Hanya anda dapat melihat</span>
+                                    </div>
+                                    <div class="privacy-option" data-privacy="public">
+                                        <span>🌍</span>
+                                        <span>Awam</span>
+                                        <span style="margin-left: auto;">Semua pengguna dapat melihat</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="form-group">
                                 <label for="journalContent">Isi Catatan</label>
-                                <textarea id="journalContent" placeholder="Tulis pemikiran, refleksi, atau peristiwa hari ini..." required></textarea>
+                                <textarea id="journalContent" class="form-control" placeholder="Tulis pemikiran, refleksi, atau peristiwa hari ini..." required></textarea>
                             </div>
+                            
                             <div class="form-actions">
                                 <button type="button" class="btn btn-secondary" id="clearBtn">Padam</button>
                                 <button type="submit" class="btn">Simpan</button>
@@ -668,7 +1302,7 @@
                     </div>
                     <div class="entries-container" id="entriesContainer">
                         <div class="empty-state">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                                 <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -681,6 +1315,31 @@
                     </div>
                 </div>
 
+                <!-- Public Entries Tab -->
+                <div class="tab-content" id="public-tab">
+                    <div class="public-entries-header">
+                        <h3>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                            Catatan Umum
+                        </h3>
+                        <p style="margin-top: 5px; opacity: 0.9;">Perkongsian dari semua pengguna</p>
+                    </div>
+                    <div class="public-entries-container" id="publicEntriesContainer">
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                            </svg>
+                            <p>Belum ada catatan awam</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam akan dipaparkan di sini</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Quran Tab -->
                 <div class="tab-content" id="quran-tab">
                     <!-- Quran Controls -->
@@ -689,19 +1348,19 @@
                         <div class="control-row">
                             <div class="control-group">
                                 <label for="surahSelect">Surah</label>
-                                <select id="surahSelect">
+                                <select id="surahSelect" class="form-control">
                                     <option value="">Pilih Surah...</option>
                                 </select>
                             </div>
                             <div class="control-group">
                                 <label for="ayatIndex">Ayat</label>
-                                <input type="number" id="ayatIndex" min="1" value="1">
+                                <input type="number" id="ayatIndex" class="form-control" min="1" value="1">
                             </div>
                         </div>
                         <button class="btn" id="loadAyatBtn">Muatkan Ayat</button>
                         <div class="quran-nav">
-                            <button class="btn-nav" id="prevAyatBtn" disabled>← Ayat Sebelumnya</button>
-                            <button class="btn-nav" id="nextAyatBtn" disabled>Ayat Seterusnya →</button>
+                            <button class="btn-nav" id="prevAyatBtn" disabled>← Sebelumnya</button>
+                            <button class="btn-nav" id="nextAyatBtn" disabled>Seterusnya →</button>
                         </div>
                     </div>
 
@@ -709,7 +1368,7 @@
                     <div class="quran-display">
                         <div id="ayat-display">
                             <div class="empty-state">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                     <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                                 </svg>
@@ -719,6 +1378,34 @@
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Date Picker Modal -->
+    <div class="date-picker-modal" id="datePickerModal">
+        <div class="date-picker-content">
+            <div class="date-picker-header">
+                <h3 id="calendarMonthYear">--</h3>
+                <button class="close-modal" id="closeDatePicker">&times;</button>
+            </div>
+            <div class="date-picker-body">
+                <div class="calendar-header">
+                    <div class="calendar-header-day">Ahad</div>
+                    <div class="calendar-header-day">Isnin</div>
+                    <div class="calendar-header-day">Selasa</div>
+                    <div class="calendar-header-day">Rabu</div>
+                    <div class="calendar-header-day">Khamis</div>
+                    <div class="calendar-header-day">Jumaat</div>
+                    <div class="calendar-header-day">Sabtu</div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar days will be inserted here -->
+                </div>
+            </div>
+            <div class="date-picker-footer">
+                <div class="hijri-date-preview" id="hijriDatePreview">--</div>
+                <button class="btn btn-small" id="todayBtn">Hari Ini</button>
+            </div>
         </div>
     </div>
 
@@ -735,7 +1422,27 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.9.0/firebase-auth-compat.js"></script>
+
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
         // Surah names in Indonesian
         const surahNames = [
             "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
@@ -781,6 +1488,15 @@
         const hijriMonth = document.getElementById('hijriMonth');
         const hijriDayName = document.getElementById('hijriDayName');
         const datePicker = document.getElementById('datePicker');
+        const dateDisplayInput = document.getElementById('dateDisplayInput');
+        const gregorianDate = document.getElementById('gregorianDate');
+        const hijriDateDisplay = document.getElementById('hijriDateDisplay');
+        const datePickerModal = document.getElementById('datePickerModal');
+        const calendarGrid = document.getElementById('calendarGrid');
+        const calendarMonthYear = document.getElementById('calendarMonthYear');
+        const hijriDatePreview = document.getElementById('hijriDatePreview');
+        const closeDatePicker = document.getElementById('closeDatePicker');
+        const todayBtn = document.getElementById('todayBtn');
         const verseContent = document.getElementById('verseContent');
         const verseTranslation = document.getElementById('verseTranslation');
         const verseReference = document.getElementById('verseReference');
@@ -790,11 +1506,17 @@
         const journalContent = document.getElementById('journalContent');
         const clearBtn = document.getElementById('clearBtn');
         const entriesContainer = document.getElementById('entriesContainer');
+        const publicEntriesContainer = document.getElementById('publicEntriesContainer');
         const entryCount = document.getElementById('entryCount');
         const entryModal = document.getElementById('entryModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
         const closeModal = document.getElementById('closeModal');
+        const privacyDropdown = document.getElementById('privacyDropdown');
+        const privacyMenu = document.getElementById('privacyMenu');
+        const privacyIcon = document.getElementById('privacyIcon');
+        const privacyText = document.getElementById('privacyText');
+        const privacyBadge = document.getElementById('privacyBadge');
         const surahSelect = document.getElementById('surahSelect');
         const ayatIndex = document.getElementById('ayatIndex');
         const loadAyatBtn = document.getElementById('loadAyatBtn');
@@ -806,24 +1528,31 @@
         let currentUser = null;
         let currentVerse = null;
         let journalEntries = [];
+        let publicEntries = [];
         let selectedAyat = null;
         let currentSurah = null;
         let currentAyat = null;
+        let selectedPrivacy = 'private';
+        let selectedDate = new Date();
+        let calendarMonth = new Date().getMonth();
+        let calendarYear = new Date().getFullYear();
 
         // Initialize app
         function init() {
             // Check if user is logged in
-            const savedUser = localStorage.getItem('journalUser');
-            if (savedUser) {
-                currentUser = savedUser;
-                showApp();
-            }
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    showApp();
+                } else {
+                    loginContainer.style.display = 'flex';
+                    appContainer.style.display = 'none';
+                }
+            });
 
-            // Load journal entries
-            const savedEntries = localStorage.getItem('journalEntries');
-            if (savedEntries) {
-                journalEntries = JSON.parse(savedEntries);
-            }
+            // Load journal entries from Firestore
+            loadJournalEntries();
+            loadPublicEntries();
 
             // Set up event listeners
             loginForm.addEventListener('submit', handleLogin);
@@ -832,6 +1561,41 @@
             clearBtn.addEventListener('click', clearForm);
             closeModal.addEventListener('click', () => {
                 entryModal.style.display = 'none';
+            });
+
+            // Date picker events
+            dateDisplayInput.addEventListener('click', () => {
+                datePickerModal.style.display = 'flex';
+                renderCalendar();
+            });
+
+            closeDatePicker.addEventListener('click', () => {
+                datePickerModal.style.display = 'none';
+            });
+
+            todayBtn.addEventListener('click', () => {
+                selectedDate = new Date();
+                updateDateDisplay();
+                datePickerModal.style.display = 'none';
+            });
+
+            // Privacy dropdown
+            privacyDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+                privacyMenu.classList.toggle('show');
+            });
+
+            document.addEventListener('click', () => {
+                privacyMenu.classList.remove('show');
+            });
+
+            document.querySelectorAll('.privacy-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectedPrivacy = option.dataset.privacy;
+                    updatePrivacyDisplay();
+                    privacyMenu.classList.remove('show');
+                });
             });
 
             // Tab switching
@@ -854,43 +1618,154 @@
             // Initialize Quran controls
             initializeQuranControls();
 
-            // Initialize date picker and displays
-            initializeDatePicker();
+            // Initialize date displays
+            updateDateDisplay();
+        }
 
-            // Display entries
-            displayEntries();
+        // Load journal entries from Firestore
+        async function loadJournalEntries() {
+            if (!currentUser) return;
+            
+            try {
+                const snapshot = await db.collection('journalEntries')
+                    .where('userId', '==', currentUser.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                journalEntries = [];
+                snapshot.forEach(doc => {
+                    journalEntries.push({ id: doc.id, ...doc.data() });
+                });
+                
+                displayEntries();
+            } catch (error) {
+                console.error('Error loading entries:', error);
+                // Fallback to localStorage
+                const savedEntries = localStorage.getItem('journalEntries');
+                if (savedEntries) {
+                    journalEntries = JSON.parse(savedEntries);
+                    displayEntries();
+                }
+            }
+        }
+
+        // Load public entries from Firestore
+        async function loadPublicEntries() {
+            try {
+                const snapshot = await db.collection('journalEntries')
+                    .where('privacy', '==', 'public')
+                    .orderBy('createdAt', 'desc')
+                    .limit(50)
+                    .get();
+                
+                publicEntries = [];
+                snapshot.forEach(doc => {
+                    publicEntries.push({ id: doc.id, ...doc.data() });
+                });
+                
+                displayPublicEntries();
+            } catch (error) {
+                console.error('Error loading public entries:', error);
+            }
         }
 
         // Initialize Date Picker and all related displays
-        function initializeDatePicker() {
-            // Set date picker to today's date
-            const today = new Date();
-            datePicker.value = today.toISOString().split('T')[0];
+        function updateDateDisplay() {
+            // Update date picker value
+            datePicker.value = selectedDate.toISOString().split('T')[0];
             
-            // Add event listener for date change
-            datePicker.addEventListener('change', (e) => {
-                const selectedDate = new Date(e.target.value + 'T00:00:00'); // Ensure correct timezone handling
-                updateAllDateDisplays(selectedDate);
-            });
-
-            // Initial update for today's date
-            updateAllDateDisplays(today);
-        }
-
-        // Update all date-related displays and verse
-        function updateAllDateDisplays(date) {
-            // Update Hijri date display
-            const hijriDate = getHijriDate(date);
+            // Update display
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            gregorianDate.textContent = selectedDate.toLocaleDateString('ms-MY', options);
+            
+            // Update Hijri date
+            const hijriDate = getHijriDate(selectedDate);
+            hijriDateDisplay.textContent = `${hijriDate.day} ${hijriDate.month} ${hijriDate.year}H`;
+            
+            // Update sidebar
             hijriDay.textContent = hijriDate.day;
             hijriMonth.textContent = hijriDate.month;
             hijriDayName.textContent = hijriDate.dayName;
             
-            // Load Quran verse based on Hijri date (Rujukan Rububiyah)
+            // Load Quran verse based on Hijri date
             currentVerse = getQuranVerseForDate(hijriDate);
             
             // Load actual verse from API
             if (currentVerse.surah && currentVerse.ayat) {
                 loadVerseFromAPI(currentVerse.surah, currentVerse.ayat);
+            }
+        }
+
+        // Render calendar
+        function renderCalendar() {
+            const firstDay = new Date(calendarYear, calendarMonth, 1).getDay();
+            const daysInMonth = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+            
+            // Update month/year display
+            const monthNames = ["Januari", "Februari", "Mac", "April", "Mei", "Jun", 
+                              "Julai", "Ogos", "September", "Oktober", "November", "Disember"];
+            calendarMonthYear.textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+            
+            // Clear calendar
+            calendarGrid.innerHTML = '';
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add days of month
+            const today = new Date();
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                // Check if it's today
+                if (calendarYear === today.getFullYear() && 
+                    calendarMonth === today.getMonth() && 
+                    day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check if it's selected date
+                if (calendarYear === selectedDate.getFullYear() && 
+                    calendarMonth === selectedDate.getMonth() && 
+                    day === selectedDate.getDate()) {
+                    dayElement.classList.add('selected');
+                }
+                
+                // Add click event
+                dayElement.addEventListener('click', () => {
+                    selectedDate = new Date(calendarYear, calendarMonth, day);
+                    updateDateDisplay();
+                    datePickerModal.style.display = 'none';
+                });
+                
+                // Update Hijri date preview on hover
+                dayElement.addEventListener('mouseenter', () => {
+                    const hoverDate = new Date(calendarYear, calendarMonth, day);
+                    const hijriDate = getHijriDate(hoverDate);
+                    hijriDatePreview.textContent = `${hijriDate.day} ${hijriDate.month} ${hijriDate.year}H`;
+                });
+                
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Update privacy display
+        function updatePrivacyDisplay() {
+            if (selectedPrivacy === 'public') {
+                privacyIcon.textContent = '🌍';
+                privacyText.textContent = 'Awam';
+                privacyBadge.textContent = 'PUBLIC';
+                privacyBadge.className = 'privacy-badge public';
+            } else {
+                privacyIcon.textContent = '🔒';
+                privacyText.textContent = 'Peribadi';
+                privacyBadge.textContent = 'PRIVATE';
+                privacyBadge.className = 'privacy-badge private';
             }
         }
 
@@ -983,7 +1858,7 @@
                 .catch(err => {
                     console.error(err);
                     ayatDisplay.innerHTML = `
-                        <div class="error-message">
+                        <div class="error-message" style="display: block;">
                             Gagal memuatkan ayat. Sila semak sambungan internet dan cuba lagi.
                         </div>
                     `;
@@ -1030,7 +1905,7 @@
                 day: 'numeric',
                 month: 'numeric',
                 year: 'numeric',
-                weekday: 'long', // Get the weekday name
+                weekday: 'long',
                 timeZone: 'Asia/Kuala_Lumpur'
             });
             let hijriParts = hijriFormatter.formatToParts(malaysiaTime);
@@ -1096,30 +1971,35 @@
         }
 
         // Login handler
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            // Simple authentication
-            if (username === 'user' && password === 'password') {
-                currentUser = username;
-                localStorage.setItem('journalUser', username);
-                showApp();
+            try {
+                // Simple authentication with email/password
+                const email = `${username}@example.com`;
+                await auth.signInWithEmailAndPassword(email, password);
                 loginError.style.display = 'none';
-            } else {
-                loginError.textContent = 'Username atau password salah. Sila cuba lagi.';
-                loginError.style.display = 'block';
+            } catch (error) {
+                // For demo, accept user/password
+                if (username === 'user' && password === 'password') {
+                    // Create anonymous user for demo
+                    await auth.signInAnonymously();
+                    currentUser = { uid: 'demo-user', displayName: username };
+                    showApp();
+                    loginError.style.display = 'none';
+                } else {
+                    loginError.textContent = 'Username atau password salah. Sila cuba lagi.';
+                    loginError.style.display = 'block';
+                }
             }
         }
 
         // Logout handler
         function handleLogout() {
-            currentUser = null;
-            localStorage.removeItem('journalUser');
-            loginContainer.style.display = 'flex';
-            appContainer.style.display = 'none';
+            auth.signOut();
         }
 
         // Show app after login
@@ -1128,73 +2008,102 @@
             appContainer.style.display = 'block';
             
             // Update user display
-            userDisplay.textContent = currentUser;
-            userAvatar.textContent = currentUser.charAt(0).toUpperCase();
+            if (currentUser.displayName) {
+                userDisplay.textContent = currentUser.displayName;
+                userAvatar.textContent = currentUser.displayName.charAt(0).toUpperCase();
+            } else {
+                userDisplay.textContent = 'User';
+                userAvatar.textContent = 'U';
+            }
         }
 
         // Save journal entry
-        function saveJournalEntry(e) {
+        async function saveJournalEntry(e) {
             e.preventDefault();
             
             const title = journalTitle.value.trim();
             const content = journalContent.value.trim();
-            const selectedDate = datePicker.value;
             
             if (!title || !content) {
                 showNotification('Judul dan isi catatan tidak boleh kosong.', 'error');
                 return;
             }
             
-            const entryDate = new Date(selectedDate + 'T00:00:00'); // Ensure correct timezone handling
-            const hijriDate = getHijriDate(entryDate);
+            const hijriDate = getHijriDate(selectedDate);
             
             const entry = {
-                id: Date.now(),
                 title: title,
                 content: content,
-                date: entryDate.toISOString(),
+                date: selectedDate.toISOString(),
                 hijriDate: hijriDate.hijriString,
+                privacy: selectedPrivacy,
+                userId: currentUser.uid || 'demo-user',
+                authorName: currentUser.displayName || 'User',
                 verse: currentVerse ? {
                     text: currentVerse.text,
                     translation: verseTranslation.textContent,
                     reference: currentVerse.reference,
                     correlation: currentVerse.correlation
-                } : null
+                } : null,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
             
-            journalEntries.unshift(entry);
-            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-            
-            // Clear form
-            clearForm();
-            
-            // Display entries
-            displayEntries();
-            
-            // Show success message
-            showNotification('Catatan berjaya disimpan!', 'success');
+            try {
+                // Save to Firestore
+                await db.collection('journalEntries').add(entry);
+                
+                // Update local entries
+                journalEntries.unshift(entry);
+                if (selectedPrivacy === 'public') {
+                    publicEntries.unshift(entry);
+                    displayPublicEntries();
+                }
+                
+                // Clear form
+                clearForm();
+                
+                // Display entries
+                displayEntries();
+                
+                // Show success message
+                showNotification('Catatan berjaya disimpan!', 'success');
+            } catch (error) {
+                console.error('Error saving entry:', error);
+                
+                // Fallback to localStorage
+                entry.id = Date.now();
+                journalEntries.unshift(entry);
+                localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+                
+                clearForm();
+                displayEntries();
+                showNotification('Catatan berjaya disimpan (tempatan)', 'success');
+            }
         }
 
         // Show notification
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
-            notification.textContent = message;
-            notification.style.position = 'fixed';
-            notification.style.top = '20px';
-            notification.style.right = '20px';
-            notification.style.zIndex = '1000';
-            notification.style.display = 'block';
-            notification.style.background = type === 'success' ? '#48bb78' : '#e53e3e';
-            notification.style.color = 'white';
-            notification.style.padding = '12px 20px';
-            notification.style.borderRadius = '8px';
-            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            
+            // Add icon based on type
+            let icon = '';
+            if (type === 'success') {
+                icon = '✓';
+            } else if (type === 'error') {
+                icon = '✕';
+            } else {
+                icon = 'ℹ';
+            }
+            
+            notification.innerHTML = `<span style="font-size: 20px;">${icon}</span> ${message}`;
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.style.display = 'none';
-                document.body.removeChild(notification);
+                notification.style.animation = 'slideOutRight 0.3s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
             }, 3000);
         }
 
@@ -1202,6 +2111,8 @@
         function clearForm() {
             journalTitle.value = '';
             journalContent.value = '';
+            selectedPrivacy = 'private';
+            updatePrivacyDisplay();
         }
 
         // Display journal entries
@@ -1211,7 +2122,7 @@
             if (journalEntries.length === 0) {
                 entriesContainer.innerHTML = `
                     <div class="empty-state">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
                             <line x1="16" y1="13" x2="8" y2="13"></line>
@@ -1238,9 +2149,14 @@
                 entryCard.innerHTML = `
                     <div class="entry-header">
                         <div class="entry-date">${formattedDate} / ${entry.hijriDate}</div>
-                        <div class="entry-actions">
-                            <button onclick="viewEntry(${entry.id})">Lihat</button>
-                            <button onclick="deleteEntry(${entry.id})">Hapus</button>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <div class="entry-privacy ${entry.privacy}">
+                                ${entry.privacy === 'public' ? '🌍' : '🔒'} ${entry.privacy.toUpperCase()}
+                            </div>
+                            <div class="entry-actions">
+                                <button onclick="viewEntry('${entry.id}')">Lihat</button>
+                                <button onclick="deleteEntry('${entry.id}')">Hapus</button>
+                            </div>
                         </div>
                     </div>
                     <h4>${entry.title}</h4>
@@ -1254,6 +2170,53 @@
                 `;
                 
                 entriesContainer.appendChild(entryCard);
+            });
+        }
+
+        // Display public entries
+        function displayPublicEntries() {
+            if (publicEntries.length === 0) {
+                publicEntriesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                        </svg>
+                        <p>Belum ada catatan awam</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam akan dipaparkan di sini</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            publicEntriesContainer.innerHTML = '';
+            
+            publicEntries.forEach(entry => {
+                const entryCard = document.createElement('div');
+                entryCard.className = 'public-entry-card';
+                
+                const entryDate = new Date(entry.date);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = entryDate.toLocaleDateString('ms-MY', options);
+                
+                entryCard.innerHTML = `
+                    <div class="public-entry-author">
+                        <div class="author-avatar">${entry.authorName ? entry.authorName.charAt(0).toUpperCase() : 'A'}</div>
+                        <div class="author-info">
+                            <div class="author-name">${entry.authorName || 'Anonymous'}</div>
+                            <div class="author-date">${formattedDate} / ${entry.hijriDate}</div>
+                        </div>
+                    </div>
+                    <h4>${entry.title}</h4>
+                    <div class="entry-content">${entry.content.substring(0, 200)}${entry.content.length > 200 ? '...' : ''}</div>
+                    ${entry.verse ? `
+                    <div class="entry-verse">
+                        <strong>Ayat Terkait:</strong> ${entry.verse.text.substring(0, 100)}...
+                        <div style="text-align: right; margin-top: 0.5rem; font-size: 0.8rem;">${entry.verse.reference}</div>
+                    </div>
+                    ` : ''}
+                `;
+                
+                publicEntriesContainer.appendChild(entryCard);
             });
         }
 
@@ -1288,14 +2251,47 @@
         }
 
         // Delete entry
-        function deleteEntry(id) {
+        async function deleteEntry(id) {
             if (confirm('Adakah anda pasti ingin memadam catatan ini?')) {
-                journalEntries = journalEntries.filter(e => e.id !== id);
-                localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-                displayEntries();
-                showNotification('Catatan berjaya dipadam.', 'success');
+                try {
+                    // Delete from Firestore
+                    await db.collection('journalEntries').doc(id).delete();
+                    
+                    // Update local entries
+                    journalEntries = journalEntries.filter(e => e.id !== id);
+                    publicEntries = publicEntries.filter(e => e.id !== id);
+                    
+                    localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+                    displayEntries();
+                    displayPublicEntries();
+                    showNotification('Catatan berjaya dipadam.', 'success');
+                } catch (error) {
+                    console.error('Error deleting entry:', error);
+                    
+                    // Fallback to localStorage
+                    journalEntries = journalEntries.filter(e => e.id !== id);
+                    localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+                    displayEntries();
+                    showNotification('Catatan berjaya dipadam (tempatan)', 'success');
+                }
             }
         }
+
+        // Add slide out animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOutRight {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', init);
