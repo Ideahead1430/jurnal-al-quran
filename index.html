@@ -3,157 +3,892 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jurnal Al-Quran Harian</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Portal Jurnal Harian</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <style>
+        /* --- Global Styles & Variables --- */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --text-color: #333;
+            --border-color: #ddd;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
+            --font-primary: 'Poppins', sans-serif;
+            --font-arabic: 'Amiri Quran', serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: #f5f7fa;
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease;
+        }
+
+        body.sidebar-open {
+            overflow: hidden; /* Prevent background scroll when sidebar is open on mobile */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Login Container --- */
+        .login-container {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+        }
+
+        .login-form {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        /* --- Header --- */
+        .header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* --- Main Layout --- */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex: 1;
+        }
+
+        .sidebar {
+            flex: 0 0 300px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .content-area {
+            flex: 1;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        /* --- Sidebar Components --- */
+        .date-display {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), #5dade2);
+            color: white;
+            border-radius: 10px;
+        }
+
+        .hijri-date {
+            font-size: 3rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .hijri-month {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 5px;
+        }
+
+        .hijri-day-name {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .verse-box {
+            padding: 20px;
+            background: #fdfbf7;
+            border-left: 4px solid var(--warning-color);
+            border-radius: 8px;
+        }
+
+        .verse-box h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .verse-text {
+            font-family: var(--font-arabic);
+            font-size: 1.5rem;
+            text-align: right;
+            line-height: 2.2;
+            color: var(--dark-color);
+            margin-bottom: 15px;
+        }
+
+        .verse-translation {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .verse-reference, .verse-correlation {
+            font-size: 0.85rem;
+            color: #777;
+            text-align: right;
+        }
+
+        .verse-correlation {
+            margin-top: 10px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        /* --- Content Area Components --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #777;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab:hover {
+            color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* --- Forms --- */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* --- Custom Date Picker --- */
+        .date-picker-wrapper {
+            position: relative;
+        }
+
+        .date-picker-display {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .date-picker-display:hover {
+            border-color: var(--primary-color);
+        }
+
+        .calendar-modal {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-hover);
+            z-index: 100;
+            margin-top: 5px;
+        }
+
+        .calendar-modal.active {
+            display: block;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .calendar-nav {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+        }
+
+        .calendar-day-header {
+            padding: 8px 5px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            background: #f8f9fa;
+        }
+
+        .calendar-day {
+            padding: 10px 5px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #eaf2f8;
+        }
+
+        .calendar-day.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .calendar-day .hijri-small {
+            font-size: 0.65rem;
+            display: block;
+            color: #888;
+            margin-top: 2px;
+        }
+        .calendar-day.selected .hijri-small {
+            color: rgba(255,255,255,0.8);
+        }
+        .calendar-day.other-month {
+            color: #ccc;
+        }
+
+        /* --- Buttons --- */
+        .btn, .btn-nav {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        .btn-nav {
+            background: var(--secondary-color);
+            color: white;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+
+        .btn-nav:hover {
+            background: #1a252f;
+        }
+
+        .btn-nav:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+        }
+
+        .btn-copy {
+            background: var(--success-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-add-journal {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* --- Entries --- */
+        .entries-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .entry-count {
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .entries-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .entry-card {
+            background: #fdfdfd;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .entry-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .entry-date {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .entry-actions button {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-weight: 500;
+            margin-left: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .entry-actions button:hover {
+            color: var(--accent-color);
+        }
+
+        .entry-card h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .entry-content {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .entry-verse {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-style: italic;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* --- Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: var(--shadow-hover);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #aaa;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: var(--accent-color);
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        /* --- Empty State & Loading --- */
+        .empty-state, .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+
+        .empty-state svg, .loading svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--primary-color);
+            animation: spin 1s ease infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* --- Error Message --- */
+        .error-message {
+            color: var(--accent-color);
+            background: #fbeaea;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none; /* Hidden by default */
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* --- Mobile Menu Toggle --- */
+        .menu-toggle {
+            display: none; /* Hidden on desktop */
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 12px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.4rem;
+            }
+
+            .menu-toggle {
+                display: block; /* Show on mobile */
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                flex: none;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: -100%; /* Hide off-screen */
+                height: 100vh;
+                z-index: 999;
+                border-radius: 0;
+                transition: left 0.3s ease;
+                padding: 20px;
+                overflow-y: auto;
+            }
+
+            body.sidebar-open .sidebar {
+                left: 0; /* Slide in */
+            }
+
+            .content-area {
+                padding: 20px 15px;
+            }
+
+            .tabs {
+                overflow-x: auto; /* Allow horizontal scrolling for tabs if needed */
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn, .btn-nav {
+                width: 100%;
+            }
+
+            .entries-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Login Container -->
-    <div id="loginContainer" class="login-container">
-        <div class="login-card">
-            <div class="login-header">
-                <h1><i class="fas fa-book-quran"></i> Jurnal Al-Quran</h1>
-                <p>Selamat datang ke sistem jurnal peribadi anda</p>
+    <div class="container login-container" id="loginContainer">
+        <h2>Selamat Datang</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: #7f8c8d;">Sila log masuk untuk meneruskan</p>
+        <form class="login-form" id="loginForm">
+            <div class="error-message" id="loginError"></div>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" value="user" required>
             </div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Masukkan username" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Masukkan password" required>
-                </div>
-                <button type="submit" class="btn-primary">Log Masuk</button>
-                <div id="loginError" class="error-message" style="display: none;"></div>
-            </form>
-        </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" value="password" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn">Log Masuk</button>
+            </div>
+        </form>
     </div>
 
     <!-- Main App Container -->
-    <div id="appContainer" class="app-container" style="display: none;">
+    <div class="container" id="appContainer" style="display: none;">
         <!-- Header -->
         <header class="header">
-            <div class="header-left">
-                <button id="menuToggle" class="menu-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <h1><i class="fas fa-book-quran"></i> Jurnal Al-Quran</h1>
-            </div>
-            <div class="header-right">
-                <div class="user-info">
-                    <div id="userAvatar" class="user-avatar">A</div>
-                    <span id="userDisplay">Admin</span>
-                </div>
-                <button id="logoutBtn" class="btn-secondary">Log Keluar</button>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <h1>Portal Jurnal Harian</h1>
+            <div class="user-info">
+                <span id="userDisplay">User</span>
+                <div class="user-avatar" id="userAvatar">U</div>
+                <button class="btn" id="logoutBtn">Log Keluar</button>
             </div>
         </header>
 
-        <div class="app-body">
+        <!-- Main Content -->
+        <div class="main-content">
             <!-- Sidebar -->
-            <aside id="sidebar" class="sidebar">
-                <div class="sidebar-header">
-                    <h2>Menu</h2>
+            <aside class="sidebar" id="sidebar">
+                <!-- Date Display -->
+                <div class="date-display">
+                    <div class="hijri-date" id="hijriDay">--</div>
+                    <div class="hijri-month" id="hijriMonth">------</div>
+                    <div class="hijri-day-name" id="hijriDayName">---------</div>
                 </div>
-                <ul class="sidebar-menu">
-                    <li><a href="#journal-tab" class="menu-item active" data-tab="journal"><i class="fas fa-pen"></i> Catatan Peribadi</a></li>
-                    <li><a href="#public-tab" class="menu-item" data-tab="public"><i class="fas fa-users"></i> Catatan Awam</a></li>
-                    <li><a href="#quran-tab" class="menu-item" data-tab="quran"><i class="fas fa-book-open"></i> Rujukan Al-Quran</a></li>
-                </ul>
+
+                <!-- Verse Box -->
+                <div class="verse-box">
+                    <h3>Rujukan Rububiyah</h3>
+                    <div class="verse-text" id="verseContent">Memuatkan...</div>
+                    <div class="verse-translation" id="verseTranslation">Memuatkan...</div>
+                    <div class="verse-reference" id="verseReference"></div>
+                    <div class="verse-correlation" id="verseCorrelation"></div>
+                </div>
             </aside>
 
-            <!-- Main Content -->
-            <main class="main-content">
-                <!-- Tab Navigation -->
-                <div class="tab-navigation">
-                    <button class="tab active" data-tab="journal">Catatan Peribadi</button>
-                    <button class="tab" data-tab="public">Catatan Awam</button>
-                    <button class="tab" data-tab="quran">Rujukan Al-Quran</button>
+            <!-- Content Area -->
+            <main class="content-area">
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="journal">Jurnal Saya</button>
+                    <button class="tab" data-tab="public">Catatan Umum</button>
+                    <button class="tab" data-tab="quran">Al-Quran</button>
                 </div>
 
-                <!-- Tab Contents -->
-                <div class="tab-contents">
-                    <!-- Journal Tab -->
-                    <div id="journal-tab" class="tab-content active">
-                        <div class="journal-form">
-                            <h2>Tulis Catatan Baru</h2>
-                            <form id="journalForm">
-                                <div class="form-group">
-                                    <label for="journalTitle">Judul Catatan</label>
-                                    <input type="text" id="journalTitle" placeholder="Berikan judul untuk catatan anda" required>
+                <!-- Journal Tab (Private) -->
+                <div class="tab-content active" id="journal-tab">
+                    <!-- Journal Form -->
+                    <div class="journal-form">
+                        <form id="journalForm">
+                            <div class="form-group">
+                                <label for="datePicker">Pilih Tarikh</label>
+                                <div class="date-picker-wrapper">
+                                    <div class="date-picker-display" id="datePickerDisplay">
+                                        <span id="selectedDateText">Pilih tarikh...</span>
+                                        <span>📅</span>
+                                    </div>
+                                    <div class="calendar-modal" id="calendarModal"></div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="journalContent">Isi Catatan</label>
-                                    <textarea id="journalContent" rows="8" placeholder="Tuliskan pemikiran, refleksi, atau apa-apa sahaja yang anda rasakan hari ini..." required></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="journalVisibility">Visibiliti</label>
-                                    <select id="journalVisibility">
-                                        <option value="private">Peribadi (Hanya anda yang boleh lihat)</option>
-                                        <option value="public">Awam (Semua pengguna boleh lihat)</option>
-                                    </select>
-                                </div>
-                                <div class="form-actions">
-                                    <button type="submit" class="btn-primary">Simpan Catatan</button>
-                                    <button type="button" id="clearBtn" class="btn-secondary">Kosongkan</button>
-                                </div>
-                            </form>
-                        </div>
+                                <input type="hidden" id="datePicker" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="journalTitle">Tajuk Catatan</label>
+                                <input type="text" id="journalTitle" placeholder="Masukkan tajuk catatan..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="journalVisibility">Visibiliti</label>
+                                <select id="journalVisibility">
+                                    <option value="private">Peribadi (Private)</option>
+                                    <option value="public">Awam (Public)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="journalContent">Isi Catatan</label>
+                                <textarea id="journalContent" placeholder="Tulis pemikiran, refleksi, atau peristiwa hari ini..." required></textarea>
+                            </div>
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary" id="clearBtn">Padam</button>
+                                <button type="submit" class="btn">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
 
-                        <div class="journal-entries">
-                            <div class="entries-header">
-                                <h2>Senarai Catatan Peribadi</h2>
-                                <span id="entryCountPrivate">0 catatan</span>
+                    <!-- Entries -->
+                    <div class="entries-header">
+                        <h3>Senarai Catatan Peribadi</h3>
+                        <div class="entry-count" id="entryCountPrivate">0 catatan</div>
+                    </div>
+                    <div class="entries-container" id="entriesContainerPrivate">
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            <p>Belum ada catatan peribadi</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mulakan menulis catatan pertama anda</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Public Tab -->
+                <div class="tab-content" id="public-tab">
+                    <div class="entries-header">
+                        <h3>Senarai Catatan Awam</h3>
+                        <div class="entry-count" id="entryCountPublic">0 catatan</div>
+                    </div>
+                    <div class="entries-container" id="entriesContainerPublic">
+                        <div class="empty-state">
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <p>Belum ada catatan awam</p>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam dari semua pengguna akan dipaparkan di sini</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quran Tab -->
+                <div class="tab-content" id="quran-tab">
+                    <!-- Quran Controls -->
+                    <div class="quran-controls">
+                        <h3>Pilih Surah dan Ayat</h3>
+                        <div class="control-row">
+                            <div class="control-group">
+                                <label for="surahSelect">Surah</label>
+                                <select id="surahSelect">
+                                    <option value="">Pilih Surah...</option>
+                                </select>
                             </div>
-                            <div id="entriesContainerPrivate" class="entries-container">
-                                <!-- Entries will be loaded here -->
+                            <div class="control-group">
+                                <label for="ayatIndex">Ayat</label>
+                                <input type="number" id="ayatIndex" min="1" value="1">
                             </div>
+                        </div>
+                        <button class="btn" id="loadAyatBtn">Muatkan Ayat</button>
+                        <div class="quran-nav">
+                            <button class="btn-nav" id="prevAyatBtn" disabled>← Ayat Sebelumnya</button>
+                            <button class="btn-nav" id="nextAyatBtn" disabled>Ayat Seterusnya →</button>
                         </div>
                     </div>
 
-                    <!-- Public Tab -->
-                    <div id="public-tab" class="tab-content">
-                        <div class="journal-entries">
-                            <div class="entries-header">
-                                <h2>Senarai Catatan Awam</h2>
-                                <span id="entryCountPublic">0 catatan</span>
-                            </div>
-                            <div id="entriesContainerPublic" class="entries-container">
-                                <!-- Entries will be loaded here -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Quran Tab -->
-                    <div id="quran-tab" class="tab-content">
-                        <div class="quran-container">
-                            <div class="quran-controls">
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="surahSelect">Pilih Surah</label>
-                                        <select id="surahSelect">
-                                            <!-- Surah options will be populated by JavaScript -->
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="ayatIndex">Nomor Ayat</label>
-                                        <input type="number" id="ayatIndex" min="1" value="1" placeholder="1">
-                                    </div>
-                                </div>
-                                <div class="form-actions">
-                                    <button id="loadAyatBtn" class="btn-primary">Muat Ayat</button>
-                                    <button id="prevAyatBtn" class="btn-secondary"><i class="fas fa-chevron-left"></i> Ayat Sebelumnya</button>
-                                    <button id="nextAyatBtn" class="btn-secondary">Ayat Berikutnya <i class="fas fa-chevron-right"></i></button>
-                                </div>
-                            </div>
-                            <div id="ayat-display" class="ayat-display">
-                                <div class="placeholder">
-                                    <i class="fas fa-book-quran"></i>
-                                    <p>Pilih surah dan ayat untuk memulakan</p>
-                                </div>
+                    <!-- Quran Display -->
+                    <div class="quran-display">
+                        <div id="ayat-display">
+                            <div class="empty-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                <p>Pilih surah dan ayat untuk memulakan</p>
                             </div>
                         </div>
                     </div>
@@ -163,55 +898,51 @@
     </div>
 
     <!-- Entry Modal -->
-    <div id="entryModal" class="modal">
+    <div class="modal" id="entryModal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalTitle">Judul Catatan</h3>
-                <button id="closeModal" class="modal-close">&times;</button>
+                <h3 id="modalTitle">Tajuk Catatan</h3>
+                <button class="close-modal" id="closeModal">&times;</button>
             </div>
-            <div id="modalBody" class="modal-body">
-                <!-- Entry details will be loaded here -->
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be inserted here -->
             </div>
         </div>
     </div>
 
-    <!-- Calendar Modal -->
-    <div id="calendarModal" class="calendar-modal">
-        <!-- Calendar will be rendered here -->
-    </div>
-
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-
     <script>
-        // --- PERSIAPAN FIREBASE ---
-        <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+        // Surah names in Indonesian
+        const surahNames = [
+            "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
+            "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Taha",
+            "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Asy-Syu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum",
+            "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir",
+            "Fussilat", "Asy-Syura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jatsiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
+            "Adz-Dzariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hasyr", "Al-Mumtahanah",
+            "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
+            "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatsir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa",
+            "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Insyiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghasyiyah", "Al-Fajr", "Al-Balad",
+            "Asy-Syams", "Al-Lail", "Adh-Dhuha", "Al-Insyirah", "At-Tin", "Al-'Alaq", "Al-Qadar", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat",
+            "Al-Qari'ah", "At-Takasur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", "Al-Kautsar", "Al-Kafirun", "An-Nasr",
+            "Al-Ikhlas", "Al-Falaq", "An-Nas"
+        ];
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyD2bg7IeRz4bR7dMkTHJo9T_Macy16COpc",
-    authDomain: "jurnal-al-quran-6ca7c.firebaseapp.com",
-    projectId: "jurnal-al-quran-6ca7c",
-    storageBucket: "jurnal-al-quran-6ca7c.firebasestorage.app",
-    messagingSenderId: "175103376818",
-    appId: "1:175103376818:web:6978f520cf9084b06ab8ab",
-    measurementId: "G-6TZ2YDZYS1"
-  };
+        // Number of ayats in each surah
+        const surahAyatCounts = [
+            7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128, 111, 110, 98, 135,
+            112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73, 54, 45, 83, 182, 88, 75, 85,
+            54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49, 62, 55, 78, 96, 29, 22, 24, 13,
+            14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28, 28, 20, 15, 21, 11, 11, 15, 8, 8,
+            19, 5, 8, 8, 11, 11, 8, 8, 10, 6, 4, 7, 3, 6, 3, 5, 4, 5, 6, 4
+        ];
 
-
-        // Inisialisasi Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        // --- TAMAT PERSIAPAN FIREBASE ---
+        // Hijri days names in Malay
+        const hijriDays = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+        const hijriMonths = [
+            "Muharram", "Safar", "Rabiulawal", "Rabiulakhir", 
+            "Jamadilawal", "Jamadilakhir", "Rejab", "Syaaban", 
+            "Ramadhan", "Syawal", "Zulkaedah", "Zulhijjah"
+        ];
 
         // DOM Elements
         const loginContainer = document.getElementById('loginContainer');
@@ -223,6 +954,17 @@
         const userAvatar = document.getElementById('userAvatar');
         const menuToggle = document.getElementById('menuToggle');
         const sidebar = document.getElementById('sidebar');
+        const hijriDay = document.getElementById('hijriDay');
+        const hijriMonth = document.getElementById('hijriMonth');
+        const hijriDayName = document.getElementById('hijriDayName');
+        const datePicker = document.getElementById('datePicker');
+        const datePickerDisplay = document.getElementById('datePickerDisplay');
+        const selectedDateText = document.getElementById('selectedDateText');
+        const calendarModal = document.getElementById('calendarModal');
+        const verseContent = document.getElementById('verseContent');
+        const verseTranslation = document.getElementById('verseTranslation');
+        const verseReference = document.getElementById('verseReference');
+        const verseCorrelation = document.getElementById('verseCorrelation');
         const journalForm = document.getElementById('journalForm');
         const journalTitle = document.getElementById('journalTitle');
         const journalContent = document.getElementById('journalContent');
@@ -245,47 +987,48 @@
 
         // State
         let currentUser = null;
+        let currentVerse = null;
         let journalEntries = [];
         let selectedAyat = null;
         let currentSurah = null;
         let currentAyat = null;
-
-        // Surah names and ayat counts
-        const surahNames = [
-            "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus",
-            "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Taha",
-            "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Asy-Syu'ara'", "An-Naml", "Al-Qasas", "Al-'Ankabut", "Ar-Rum",
-            "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir",
-            "Fussilat", "Asy-Syura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jatsiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf",
-            "Adz-Dzariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hasyr", "Al-Mumtahanah",
-            "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij",
-            "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddatsir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa",
-            "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Insyiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghasyiyah", "Al-Fajr", "Al-Balad",
-            "Asy-Syams", "Al-Lail", "Adh-Dhuha", "Al-Insyirah", "At-Tin", "Al-'Alaq", "Al-Qadar", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat",
-            "Al-Qari'ah", "At-Takasur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", "Al-Kautsar", "Al-Kafirun", "An-Nasr",
-            "Al-Ikhlas", "Al-Falaq", "An-Nas"
-        ];
-        const surahAyatCounts = [
-            7, 286, 200, 176, 120, 165, 206, 75, 129, 109, 123, 111, 43, 52, 99, 128, 111, 110, 98, 135,
-            112, 78, 118, 64, 77, 227, 93, 88, 69, 60, 34, 30, 73, 54, 45, 83, 182, 88, 75, 85,
-            54, 53, 89, 59, 37, 35, 38, 29, 18, 45, 60, 49, 62, 55, 78, 96, 29, 22, 24, 13,
-            14, 11, 11, 18, 12, 12, 30, 52, 52, 44, 28, 28, 20, 15, 21, 11, 11, 15, 8, 8,
-            19, 5, 8, 8, 11, 11, 8, 8, 10, 6, 4, 7, 3, 6, 3, 5, 4, 5, 6, 4
-        ];
+        let currentPickerDate = new Date(); // State for the custom date picker
 
         // Initialize app
         function init() {
+            // Check if user is logged in
+            const savedUser = localStorage.getItem('journalUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                showApp();
+            }
+
+            // Load journal entries
+            const savedEntries = localStorage.getItem('journalEntries');
+            if (savedEntries) {
+                journalEntries = JSON.parse(savedEntries);
+            }
+
             // Set up event listeners
             loginForm.addEventListener('submit', handleLogin);
             logoutBtn.addEventListener('click', handleLogout);
             journalForm.addEventListener('submit', saveJournalEntry);
             clearBtn.addEventListener('click', clearForm);
-            closeModal.addEventListener('click', () => entryModal.classList.remove('active'));
+            closeModal.addEventListener('click', () => {
+                entryModal.classList.remove('active');
+            });
             
             // Mobile menu toggle
-            menuToggle.addEventListener('click', () => document.body.classList.toggle('sidebar-open'));
+            menuToggle.addEventListener('click', () => {
+                document.body.classList.toggle('sidebar-open');
+            });
+
+            // Close sidebar when clicking outside on mobile
             document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target) && document.body.classList.contains('sidebar-open')) {
+                if (window.innerWidth <= 768 && 
+                    !sidebar.contains(e.target) && 
+                    !menuToggle.contains(e.target) && 
+                    document.body.classList.contains('sidebar-open')) {
                     document.body.classList.remove('sidebar-open');
                 }
             });
@@ -294,21 +1037,142 @@
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', () => {
                     const tabName = tab.dataset.tab;
+                    
+                    // Update active tab
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                     tab.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    // Update active content
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
                     document.getElementById(`${tabName}-tab`).classList.add('active');
-                    if (tabName === 'journal') displayEntries('private');
-                    if (tabName === 'public') displayEntries('public');
+
+                    // Display entries based on tab
+                    if (tabName === 'journal') {
+                        displayEntries('private');
+                    } else if (tabName === 'public') {
+                        displayEntries('public');
+                    }
                 });
             });
 
             // Initialize Quran controls
             initializeQuranControls();
+
+            // Initialize custom date picker
+            initializeCustomDatePicker();
+
+            // Display entries
+            displayEntries('private');
+        }
+
+        // Initialize Custom Date Picker
+        function initializeCustomDatePicker() {
+            // Set initial date to today
+            updateDatePickerDisplay(currentPickerDate);
+            datePicker.value = currentPickerDate.toISOString().split('T')[0];
+
+            // Open calendar on display click
+            datePickerDisplay.addEventListener('click', () => {
+                calendarModal.classList.toggle('active');
+                if (calendarModal.classList.contains('active')) {
+                    renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
+                }
+            });
+
+            // Close calendar when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!datePickerDisplay.contains(e.target) && !calendarModal.contains(e.target)) {
+                    calendarModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Render calendar grid
+        function renderCalendar(year, month) {
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const daysInPrevMonth = new Date(year, month, 0).getDate();
+            
+            let html = `
+                <div class="calendar-header">
+                    <button class="calendar-nav" id="prevMonth">&lt;</button>
+                    <span>${hijriMonths[month]} ${year}</span>
+                    <button class="calendar-nav" id="nextMonth">&gt;</button>
+                </div>
+                <div class="calendar-grid">
+            `;
+            
+            // Day headers
+            const dayHeaders = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
+            dayHeaders.forEach(day => {
+                html += `<div class="calendar-day-header">${day}</div>`;
+            });
+
+            // Previous month days
+            for (let i = firstDay - 1; i >= 0; i--) {
+                const day = daysInPrevMonth - i;
+                const date = new Date(year, month - 1, day);
+                const hijri = getHijriDate(date);
+                html += `<div class="calendar-day other-month" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
+            }
+
+            // Current month days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const date = new Date(year, month, day);
+                const hijri = getHijriDate(date);
+                const isSelected = date.toDateString() === currentPickerDate.toDateString();
+                html += `<div class="calendar-day ${isSelected ? 'selected' : ''}" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
+            }
+
+            // Next month days
+            const totalCells = firstDay + daysInMonth;
+            const nextMonthDays = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let day = 1; day <= nextMonthDays; day++) {
+                const date = new Date(year, month + 1, day);
+                const hijri = getHijriDate(date);
+                html += `<div class="calendar-day other-month" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
+            }
+
+            html += `</div>`;
+            calendarModal.innerHTML = html;
+
+            // Add event listeners to calendar days
+            document.querySelectorAll('.calendar-day:not(.other-month)').forEach(dayEl => {
+                dayEl.addEventListener('click', (e) => {
+                    const selectedDateStr = e.currentTarget.dataset.date;
+                    currentPickerDate = new Date(selectedDateStr + 'T00:00:00');
+                    updateDatePickerDisplay(currentPickerDate);
+                    datePicker.value = selectedDateStr;
+                    updateAllDateDisplays(currentPickerDate);
+                    calendarModal.classList.remove('active');
+                });
+            });
+
+            // Add event listeners to month navigation
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentPickerDate.setMonth(currentPickerDate.getMonth() - 1);
+                renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
+            });
+
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentPickerDate.setMonth(currentPickerDate.getMonth() + 1);
+                renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
+            });
+        }
+
+        // Update the display text of the date picker
+        function updateDatePickerDisplay(date) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const gregorianStr = date.toLocaleDateString('ms-MY', options);
+            const hijriStr = getHijriDate(date).hijriString;
+            selectedDateText.textContent = `${gregorianStr} / ${hijriStr}`;
         }
 
         // Initialize Quran controls
         function initializeQuranControls() {
+            // Populate surah select
             surahNames.forEach((name, index) => {
                 const option = document.createElement('option');
                 option.value = index + 1;
@@ -316,19 +1180,27 @@
                 surahSelect.appendChild(option);
             });
 
+            // Event listeners for navigation
             loadAyatBtn.addEventListener('click', () => {
                 const surah = parseInt(surahSelect.value);
                 const ayat = parseInt(ayatIndex.value);
-                if (surah && ayat) loadAyat(surah, ayat);
+                if (surah && ayat) {
+                    loadAyat(surah, ayat);
+                }
             });
 
             prevAyatBtn.addEventListener('click', () => {
-                if (currentSurah > 1 && currentAyat > 1) loadAyat(currentSurah, currentAyat - 1);
+                if (currentSurah > 1 && currentAyat > 1) {
+                    loadAyat(currentSurah, currentAyat - 1);
+                }
             });
 
             nextAyatBtn.addEventListener('click', () => {
-                if (currentSurah && currentAyat && currentAyat < surahAyatCounts[currentSurah - 1]) {
-                    loadAyat(currentSurah, currentAyat + 1);
+                if (currentSurah && currentAyat) {
+                    const maxAyat = surahAyatCounts[currentSurah - 1];
+                    if (currentAyat < maxAyat) {
+                        loadAyat(currentSurah, currentAyat + 1);
+                    }
                 }
             });
         }
@@ -337,13 +1209,24 @@
         function loadAyat(surah, ayat) {
             currentSurah = surah;
             currentAyat = ayat;
+
+            // Update UI inputs
             surahSelect.value = surah;
             ayatIndex.value = ayat;
+
+            // Update navigation buttons
             prevAyatBtn.disabled = (surah === 1 && ayat === 1);
             nextAyatBtn.disabled = (ayat >= surahAyatCounts[surah - 1]);
 
-            ayatDisplay.innerHTML = `<div class="loading"><div class="loading-spinner"></div><p>Memuatkan ayat...</p></div>`;
+            // Show loading
+            ayatDisplay.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Memuatkan ayat...</p>
+                </div>
+            `;
 
+            // Gunakan API AlQuran.cloud – terjemahan Indonesia
             fetch(`https://api.alquran.cloud/v1/ayah/${surah}:${ayat}/editions/quran-uthmani,id.indonesian`)
                 .then(response => response.json())
                 .then(data => {
@@ -352,7 +1235,11 @@
                         const terjemahanText = data.data[1].text;
                         const refText = `${surahNames[surah-1]} (${surah}:${ayat})`;
 
-                        selectedAyat = { ref: refText, arabic: arabicText, terjemahan: terjemahanText };
+                        selectedAyat = {
+                            ref: refText,
+                            arabic: arabicText,
+                            terjemahan: terjemahanText
+                        };
 
                         ayatDisplay.innerHTML = `
                             <div class="ayat-box">
@@ -371,219 +1258,363 @@
                 })
                 .catch(err => {
                     console.error(err);
-                    ayatDisplay.innerHTML = `<div class="error-message">Gagal memuatkan ayat. Sila semak sambungan internet.</div>`;
+                    ayatDisplay.innerHTML = `
+                        <div class="error-message">
+                            Gagal memuatkan ayat. Sila semak sambungan internet dan cuba lagi.
+                        </div>
+                    `;
                 });
         }
 
+        // Copy ayat to clipboard
         function copyAyat() {
             if (!selectedAyat) return;
+            
             const textToCopy = `${selectedAyat.ref}\n\n${selectedAyat.arabic}\n\nTerjemahan:\n${selectedAyat.terjemahan}`;
-            navigator.clipboard.writeText(textToCopy).then(() => showNotification('Ayat berjaya disalin!', 'success'))
-                .catch(() => showNotification('Gagal menyalin ayat', 'error'));
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showNotification('Ayat berjaya disalin!', 'success');
+            }).catch(err => {
+                showNotification('Gagal menyalin ayat', 'error');
+            });
         }
 
+        // Add ayat to journal
         function addToJournal() {
             if (!selectedAyat) return;
+            
+            // Switch to journal tab
             document.querySelector('[data-tab="journal"]').click();
+            
+            // Add ayat to journal content
             const ayatText = `\n\n---\n${selectedAyat.ref}\n${selectedAyat.arabic}\n\n${selectedAyat.terjemahan}\n---`;
             journalContent.value += ayatText;
+            
+            // Scroll to journal form
             document.querySelector('.journal-form').scrollIntoView({ behavior: 'smooth' });
+            
             showNotification('Ayat ditambah ke catatan', 'success');
         }
 
-        // --- LOGIK FIREBASE ---
+        // Improved Hijri date conversion using Intl.DateTimeFormat
+        function getHijriDate(date) {
+            // Get Malaysia time
+            const malaysiaTime = new Date(date.toLocaleString("en-US", {timeZone: "Asia/Kuala_Lumpur"}));
+            
+            // Format Hijri date
+            const hijriFormatter = new Intl.DateTimeFormat('en-TN-u-ca-islamic-umalqura', {
+                day: 'numeric',
+                month: 'numeric',
+                year: 'numeric',
+                weekday: 'long',
+                timeZone: 'Asia/Kuala_Lumpur'
+            });
+            let hijriParts = hijriFormatter.formatToParts(malaysiaTime);
+        
+            const hijriDay = parseInt(hijriParts.find(p => p.type === 'day')?.value);
+            const hijriMonthIndex = parseInt(hijriParts.find(p => p.type === 'month')?.value);
+            const hijriYear = parseInt(hijriParts.find(p => p.type === 'year')?.value);
+            const hijriWeekdayEn = hijriParts.find(p => p.type === 'weekday')?.value;
+        
+            const hijriMonthName = hijriMonths[hijriMonthIndex - 1] || "Muharram";
+            
+            // Map English weekday to Malay
+            const weekdayMap = {
+                "Monday": "Isnin", "Tuesday": "Selasa", "Wednesday": "Rabu", "Thursday": "Khamis",
+                "Friday": "Jumaat", "Saturday": "Sabtu", "Sunday": "Ahad"
+            };
+            const hijriDayName = weekdayMap[hijriWeekdayEn] || "Hari tidak diketahui";
+            
+            return {
+                day: hijriDay,
+                month: hijriMonthName,
+                monthIndex: hijriMonthIndex,
+                year: hijriYear,
+                dayName: hijriDayName,
+                hijriString: `${hijriDay} ${hijriMonthName} ${hijriYear}H`
+            };
+        }
 
-        // Listener untuk status pengguna
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user.email.split('@')[0]; // Ambil username dari e-mel
-                showApp();
-                loadEntriesFromFirestore();
-            } else {
-                currentUser = null;
-                loginContainer.style.display = 'flex';
-                appContainer.style.display = 'none';
+        // Get Quran verse based on Hijri date (Rujukan Rububiyah)
+        function getQuranVerseForDate(hijriDate) {
+            const day = hijriDate.day;
+            const targetSurah = day;
+            const targetAyat = day;
+            
+            return {
+                text: `Memuatkan ayat dari Surah ${surahNames[targetSurah-1]}...`,
+                reference: `QS. ${surahNames[targetSurah-1]}:${targetAyat}`,
+                correlation: `Rujukan Rububiyah - ${hijriDate.dayName}, ${hijriDate.day} ${hijriDate.month}: ${targetSurah}:${targetAyat}`,
+                surah: targetSurah,
+                ayat: targetAyat
+            };
+        }
+
+        // Load verse from API
+        function loadVerseFromAPI(surah, ayat) {
+            fetch(`https://api.alquran.cloud/v1/ayah/${surah}:${ayat}/editions/quran-uthmani,id.indonesian`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.data && data.data.length >= 2) {
+                        verseContent.textContent = data.data[0].text;
+                        verseTranslation.textContent = data.data[1].text;
+                        verseReference.textContent = `QS. ${surahNames[surah-1]}:${ayat}`;
+                    }
+                })
+                .catch(err => {
+                    console.error('Error loading verse:', err);
+                    verseContent.textContent = "Gagal memuatkan ayat.";
+                    verseTranslation.textContent = "";
+                    verseReference.textContent = "";
+                });
+        }
+
+        // Update all date-related displays and verse
+        function updateAllDateDisplays(date) {
+            // Update Hijri date display
+            const hijriDate = getHijriDate(date);
+            hijriDay.textContent = hijriDate.day;
+            hijriMonth.textContent = hijriDate.month;
+            hijriDayName.textContent = hijriDate.dayName;
+            
+            // Load Quran verse based on Hijri date (Rujukan Rububiyah)
+            currentVerse = getQuranVerseForDate(hijriDate);
+            
+            // Load actual verse from API
+            if (currentVerse.surah && currentVerse.ayat) {
+                loadVerseFromAPI(currentVerse.surah, currentVerse.ayat);
             }
-        });
+        }
 
-        // Handle login
-        async function handleLogin(e) {
+        // Login handler
+        function handleLogin(e) {
             e.preventDefault();
+            
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            const email = `${username}@example.com`; // Anggap username adalah bahagian depan e-mel
             
-            try {
-                await auth.signInWithEmailAndPassword(email, password);
+            // Simple authentication
+            if (username === 'user' && password === 'password') {
+                currentUser = username;
+                localStorage.setItem('journalUser', username);
+                showApp();
                 loginError.style.display = 'none';
-            } catch (error) {
-                loginError.textContent = 'Username atau password salah. ' + error.message;
+            } else {
+                loginError.textContent = 'Username atau password salah. Sila cuba lagi.';
                 loginError.style.display = 'block';
             }
         }
 
-        // Handle logout
+        // Logout handler
         function handleLogout() {
-            auth.signOut();
+            currentUser = null;
+            localStorage.removeItem('journalUser');
+            loginContainer.style.display = 'flex';
+            appContainer.style.display = 'none';
         }
 
         // Show app after login
         function showApp() {
             loginContainer.style.display = 'none';
             appContainer.style.display = 'block';
+            
+            // Update user display
             userDisplay.textContent = currentUser;
             userAvatar.textContent = currentUser.charAt(0).toUpperCase();
         }
 
-        // Muat semua catatan dari Firestore
-        async function loadEntriesFromFirestore() {
-            try {
-                const snapshot = await db.collection('entries').orderBy('date', 'desc').get();
-                journalEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
-                const activeTab = document.querySelector('.tab.active').dataset.tab;
-                displayEntries(activeTab === 'public' ? 'public' : 'private');
-            } catch (error) {
-                console.error("Error loading entries: ", error);
-                showNotification('Gagal memuatkan catatan.', 'error');
-            }
-        }
-
-        // Save journal entry to Firestore
-        async function saveJournalEntry(e) {
+        // Save journal entry
+        function saveJournalEntry(e) {
             e.preventDefault();
+            
             const title = journalTitle.value.trim();
             const content = journalContent.value.trim();
             const visibility = journalVisibility.value;
+            const selectedDate = datePicker.value;
             
             if (!title || !content) {
                 showNotification('Judul dan isi catatan tidak boleh kosong.', 'error');
                 return;
             }
-
+            
+            const entryDate = new Date(selectedDate + 'T00:00:00');
+            const hijriDate = getHijriDate(entryDate);
+            
             const entry = {
+                id: Date.now(),
                 title: title,
                 content: content,
-                date: firebase.firestore.Timestamp.now(), // Gunakan Timestamp Firestore
-                visibility: visibility,
-                author: currentUser,
-                verse: selectedAyat ? { ref: selectedAyat.ref, text: selectedAyat.arabic, translation: selectedAyat.terjemahan } : null
+                date: entryDate.toISOString(),
+                hijriDate: hijriDate.hijriString,
+                visibility: visibility, // NEW: Add visibility
+                author: currentUser, // NEW: Add author
+                verse: currentVerse ? {
+                    text: currentVerse.text,
+                    translation: verseTranslation.textContent,
+                    reference: currentVerse.reference,
+                    correlation: currentVerse.correlation
+                } : null
             };
-
-            try {
-                await db.collection('entries').add(entry);
-                await loadEntriesFromFirestore(); // Muat semula senarai
-                clearForm();
-                showNotification('Catatan berjaya disimpan!', 'success');
-            } catch (error) {
-                console.error("Error saving document: ", error);
-                showNotification('Gagal menyimpan catatan.', 'error');
-            }
+            
+            journalEntries.unshift(entry);
+            localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+            
+            // Clear form
+            clearForm();
+            
+            // Display entries
+            displayEntries(visibility); // Display based on the entry's visibility
+            
+            // Show success message
+            showNotification('Catatan berjaya disimpan!', 'success');
         }
 
-        // Delete entry from Firestore
-        async function deleteEntry(id) {
-            if (!confirm('Adakah anda pasti ingin memadam catatan ini?')) return;
-
-            try {
-                await db.collection('entries').doc(id).delete();
-                await loadEntriesFromFirestore(); // Muat semula senarai
-                showNotification('Catatan berjaya dipadam.', 'success');
-            } catch (error) {
-                console.error("Error deleting document: ", error);
-                showNotification('Gagal memadam catatan.', 'error');
-            }
-        }
-
-        // --- TAMAT LOGIK FIREBASE ---
-
-        // Helper functions
+        // Show notification
         function showNotification(message, type) {
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed; top: 20px; right: 20px; z-index: 1000;
-                background: ${type === 'success' ? '#48bb78' : '#e53e3e'}; color: white;
-                padding: 12px 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
+            notification.style.position = 'fixed';
+            notification.style.top = '20px';
+            notification.style.right = '20px';
+            notification.style.zIndex = '1000';
+            notification.style.display = 'block';
+            notification.style.background = type === 'success' ? '#48bb78' : '#e53e3e';
+            notification.style.color = 'white';
+            notification.style.padding = '12px 20px';
+            notification.style.borderRadius = '8px';
+            notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
             document.body.appendChild(notification);
+            
             setTimeout(() => {
                 notification.style.display = 'none';
                 document.body.removeChild(notification);
             }, 3000);
         }
 
+        // Clear form
         function clearForm() {
             journalTitle.value = '';
             journalContent.value = '';
-            journalVisibility.value = 'private';
+            journalVisibility.value = 'private'; // Reset to default
         }
 
+        // Display journal entries with filter
         function displayEntries(filter = 'private') {
             const filteredEntries = journalEntries.filter(entry => entry.visibility === filter);
-            const container = filter === 'private' ? entriesContainerPrivate : entriesContainerPublic;
-            const countElement = filter === 'private' ? entryCountPrivate : entryCountPublic;
+            
+            // Determine which container and count to update
+            let container, countElement, headerText;
+            if (filter === 'private') {
+                container = entriesContainerPrivate;
+                countElement = entryCountPrivate;
+                headerText = "Senarai Catatan Peribadi";
+            } else {
+                container = entriesContainerPublic;
+                countElement = entryCountPublic;
+                headerText = "Senarai Catatan Awam";
+            }
 
             countElement.textContent = `${filteredEntries.length} catatan`;
             
             if (filteredEntries.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fas fa-${filter === 'private' ? 'file-alt' : 'globe'}"></i>
-                        <p>Belum ada catatan ${filter === 'private' ? 'peribadi' : 'awam'}</p>
+                        ${filter === 'private' ? 
+                        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        <p>Belum ada catatan peribadi</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mulakan menulis catatan pertama anda</p>` :
+                        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <p>Belum ada catatan awam</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam dari semua pengguna akan dipaparkan di sini</p>`
+                        }
                     </div>
                 `;
                 return;
             }
             
             container.innerHTML = '';
+            
             filteredEntries.forEach(entry => {
                 const entryCard = document.createElement('div');
                 entryCard.className = 'entry-card';
                 
-                const entryDate = entry.date.toDate(); // Tukar Timestamp Firestore kepada Date
-                const formattedDate = entryDate.toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+                const entryDate = new Date(entry.date);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = entryDate.toLocaleDateString('ms-MY', options);
                 
                 entryCard.innerHTML = `
                     <div class="entry-header">
-                        <div class="entry-date">${formattedDate}</div>
+                        <div class="entry-date">${formattedDate} / ${entry.hijriDate}</div>
                         <div class="entry-actions">
-                            <button onclick="viewEntry('${entry.id}')">Lihat</button>
-                            ${entry.author === currentUser ? `<button onclick="deleteEntry('${entry.id}')">Hapus</button>` : ''}
+                            <button onclick="viewEntry(${entry.id})">Lihat</button>
+                            ${entry.author === currentUser ? `<button onclick="deleteEntry(${entry.id})">Hapus</button>` : ''}
                         </div>
                     </div>
                     <h4>${entry.title}</h4>
                     <div class="entry-content">${entry.content.substring(0, 150)}${entry.content.length > 150 ? '...' : ''}</div>
-                    ${entry.verse ? `<div class="entry-verse"><strong>Ayat:</strong> ${entry.verse.ref}</div>` : ''}
+                    ${entry.verse ? `
+                    <div class="entry-verse">
+                        <strong>Ayat Terkait:</strong> ${entry.verse.text.substring(0, 100)}...
+                        <div style="text-align: right; margin-top: 0.5rem; font-size: 0.8rem;">${entry.verse.reference}</div>
+                    </div>
+                    ` : ''}
                     ${entry.author !== currentUser ? `<div style="margin-top: 10px; font-size: 0.85rem; color: #888;">Oleh: ${entry.author}</div>` : ''}
                 `;
+                
                 container.appendChild(entryCard);
             });
         }
 
+        // View entry details
         function viewEntry(id) {
             const entry = journalEntries.find(e => e.id === id);
             if (!entry) return;
             
             modalTitle.textContent = entry.title;
-            const entryDate = entry.date.toDate();
-            const formattedDate = entryDate.toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' });
+            
+            const entryDate = new Date(entry.date);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            const formattedDate = entryDate.toLocaleDateString('ms-MY', options);
             
             modalBody.innerHTML = `
-                <p style="margin-bottom: 1rem; color: #666;">${formattedDate} | ${entry.visibility === 'public' ? 'Awam' : 'Peribadi'} ${entry.author !== currentUser ? `| Oleh: ${entry.author}` : ''}</p>
+                <p style="margin-bottom: 1rem; color: #666;">${formattedDate} / ${entry.hijriDate} | ${entry.visibility === 'public' ? 'Awam' : 'Peribadi'} ${entry.author !== currentUser ? `| Oleh: ${entry.author}` : ''}</p>
                 <div style="margin-bottom: 1.5rem; white-space: pre-wrap;">${entry.content}</div>
                 ${entry.verse ? `
                 <div class="entry-verse">
                     <strong>Ayat Terkait:</strong>
                     <div style="margin-top: 0.5rem; font-style: italic; font-size: 1.1rem;">${entry.verse.text}</div>
                     <div style="margin-top: 0.5rem; font-style: italic; font-size: 1rem;">${entry.verse.translation}</div>
-                    <div style="text-align: right; margin-top: 0.5rem; font-size: 0.9rem; font-weight: 500;">${entry.verse.ref}</div>
+                    <div style="text-align: right; margin-top: 0.5rem; font-size: 0.9rem; font-weight: 500;">${entry.verse.reference}</div>
+                    <div class="verse-correlation" style="margin-top: 1rem;">
+                        <strong>Korelasi:</strong> ${entry.verse.correlation}
+                    </div>
                 </div>
                 ` : ''}
             `;
             
             entryModal.classList.add('active');
+        }
+
+        // Delete entry
+        function deleteEntry(id) {
+            if (confirm('Adakah anda pasti ingin memadam catatan ini?')) {
+                journalEntries = journalEntries.filter(e => e.id !== id);
+                localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+                // Re-display entries for the current active tab
+                const activeTab = document.querySelector('.tab.active').dataset.tab;
+                displayEntries(activeTab === 'public' ? 'public' : 'private');
+                showNotification('Catatan berjaya dipadam.', 'success');
+            }
         }
 
         // Initialize app when DOM is loaded
