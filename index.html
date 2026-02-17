@@ -3,28 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Jurnal Harian</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri+Quran&display=swap" rel="stylesheet">
+    <title>Portal Jurnal Harian & Rujukan Rububiyah</title>
     <style>
-        /* --- Global Styles & Variables --- */
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2c3e50;
-            --accent-color: #e74c3c;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --light-color: #ecf0f1;
-            --dark-color: #34495e;
-            --text-color: #333;
-            --border-color: #ddd;
-            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.15);
-            --font-primary: 'Poppins', sans-serif;
-            --font-arabic: 'Amiri Quran', serif;
-        }
-
+        /* General Styles */
         * {
             margin: 0;
             padding: 0;
@@ -32,63 +13,41 @@
         }
 
         body {
-            font-family: var(--font-primary);
-            background-color: #f5f7fa;
-            color: var(--text-color);
-            line-height: 1.6;
-            transition: background-color 0.3s ease;
-        }
-
-        body.sidebar-open {
-            overflow: hidden; /* Prevent background scroll when sidebar is open on mobile */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .container {
+            width: 100%;
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            max-height: 95vh;
         }
 
-        /* --- Login Container --- */
-        .login-container {
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-        }
-
-        .login-container h2 {
-            margin-bottom: 10px;
-            color: var(--secondary-color);
-        }
-
-        .login-form {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        /* --- Header --- */
+        /* Header */
         .header {
-            background: white;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
+            background: linear-gradient(90deg, #2c3e50, #3498db);
+            color: white;
+            padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
         }
 
         .header h1 {
-            color: var(--primary-color);
             font-size: 1.8rem;
+            font-weight: 600;
         }
 
         .user-info {
@@ -101,314 +60,27 @@
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--primary-color);
-            color: white;
+            background: #3498db;
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: 600;
-        }
-
-        /* --- Main Layout --- */
-        .main-content {
-            display: flex;
-            gap: 20px;
-            flex: 1;
-        }
-
-        .sidebar {
-            flex: 0 0 300px;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .content-area {
-            flex: 1;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        /* --- Sidebar Components --- */
-        .date-display {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-color), #5dade2);
-            color: white;
-            border-radius: 10px;
-        }
-
-        .hijri-date {
-            font-size: 3rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-
-        .hijri-month {
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-top: 5px;
-        }
-
-        .hijri-day-name {
-            font-size: 1rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        .verse-box {
-            padding: 20px;
-            background: #fdfbf7;
-            border-left: 4px solid var(--warning-color);
-            border-radius: 8px;
-        }
-
-        .verse-box h3 {
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .verse-text {
-            font-family: var(--font-arabic);
-            font-size: 1.5rem;
-            text-align: right;
-            line-height: 2.2;
-            color: var(--dark-color);
-            margin-bottom: 15px;
-        }
-
-        .verse-translation {
-            font-style: italic;
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .verse-reference, .verse-correlation {
-            font-size: 0.85rem;
-            color: #777;
-            text-align: right;
-        }
-
-        .verse-correlation {
-            margin-top: 10px;
-            font-weight: 500;
-            color: var(--secondary-color);
-        }
-
-        /* --- Content Area Components --- */
-        .tabs {
-            display: flex;
-            border-bottom: 2px solid var(--border-color);
-            margin-bottom: 25px;
-        }
-
-        .tab {
-            background: none;
-            border: none;
-            padding: 12px 20px;
-            font-size: 1rem;
-            font-weight: 500;
-            color: #777;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-            margin-bottom: -2px;
-        }
-
-        .tab.active {
-            color: var(--primary-color);
-            border-bottom-color: var(--primary-color);
-        }
-
-        .tab:hover {
-            color: var(--secondary-color);
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        /* --- Forms --- */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--secondary-color);
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-family: var(--font-primary);
-            font-size: 1rem;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .form-actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        /* --- Custom Date Picker --- */
-        .date-picker-wrapper {
-            position: relative;
-        }
-
-        .date-picker-display {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .date-picker-display:hover {
-            border-color: var(--primary-color);
-        }
-
-        .calendar-modal {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: var(--shadow-hover);
-            z-index: 100;
-            margin-top: 5px;
-        }
-
-        .calendar-modal.active {
-            display: block;
-        }
-
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .calendar-nav {
-            background: none;
-            border: none;
+            font-weight: bold;
             font-size: 1.2rem;
-            cursor: pointer;
-            color: var(--primary-color);
-        }
-
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            text-align: center;
-        }
-
-        .calendar-day-header {
-            padding: 8px 5px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--secondary-color);
-            background: #f8f9fa;
-        }
-
-        .calendar-day {
-            padding: 10px 5px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            position: relative;
-        }
-
-        .calendar-day:hover {
-            background: #eaf2f8;
-        }
-
-        .calendar-day.selected {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .calendar-day .hijri-small {
-            font-size: 0.65rem;
-            display: block;
-            color: #888;
-            margin-top: 2px;
-        }
-        .calendar-day.selected .hijri-small {
-            color: rgba(255,255,255,0.8);
-        }
-        .calendar-day.other-month {
-            color: #ccc;
-        }
-
-        /* --- Buttons --- */
-        .btn, .btn-nav {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
         }
 
         .btn {
-            background: var(--primary-color);
+            background: #e74c3c;
             color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
         }
 
         .btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+            background: #c0392b;
         }
 
         .btn-secondary {
@@ -419,124 +91,256 @@
             background: #7f8c8d;
         }
 
-        .btn-nav {
-            background: var(--secondary-color);
+        /* Main Content */
+        .main-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            padding: 30px 20px;
+            border-right: 1px solid #dee2e6;
+            overflow-y: auto;
+        }
+
+        .date-display {
+            background: #2c3e50;
             color: white;
-            padding: 10px 15px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .date-display .hijri-date {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .date-display .hijri-month {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .date-display .hijri-day-name {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .verse-box {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .verse-box h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .verse-text {
+            font-size: 1.3rem;
+            line-height: 2;
+            text-align: right;
+            font-family: 'Traditional Arabic', 'Arial', sans-serif;
+            margin-bottom: 15px;
+            color: #111;
+        }
+
+        .verse-translation {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .verse-reference {
+            text-align: right;
             font-size: 0.9rem;
+            color: #3498db;
+            font-weight: 500;
         }
 
-        .btn-nav:hover {
-            background: #1a252f;
-        }
-
-        .btn-nav:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .btn-small {
-            padding: 6px 12px;
+        .verse-correlation {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ddd;
             font-size: 0.85rem;
-            border-radius: 6px;
+            color: #666;
         }
 
-        .btn-copy {
-            background: var(--success-color);
-            color: white;
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
             border: none;
             cursor: pointer;
+            font-size: 1rem;
+            color: #6c757d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
 
-        .btn-add-journal {
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            cursor: pointer;
+        .tab.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            font-weight: 600;
         }
 
-        /* --- Entries --- */
+        .tab-content {
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Journal Form */
+        .journal-form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 150px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Entries */
         .entries-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--border-color);
         }
 
         .entry-count {
-            color: #777;
+            color: #6c757d;
             font-size: 0.9rem;
         }
 
         .entries-container {
             display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
 
         .entry-card {
-            background: #fdfdfd;
-            border: 1px solid #eee;
-            border-radius: 10px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
             padding: 20px;
-            transition: all 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
             cursor: pointer;
         }
 
         .entry-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .entry-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .entry-date {
+            margin-bottom: 15px;
+            color: #6c757d;
             font-size: 0.85rem;
-            color: #777;
         }
 
         .entry-actions button {
             background: none;
             border: none;
-            color: var(--primary-color);
+            color: #3498db;
             cursor: pointer;
-            font-weight: 500;
+            font-size: 0.85rem;
             margin-left: 10px;
-            transition: color 0.3s ease;
         }
 
         .entry-actions button:hover {
-            color: var(--accent-color);
+            text-decoration: underline;
         }
 
         .entry-card h4 {
-            color: var(--secondary-color);
             margin-bottom: 10px;
+            color: #2c3e50;
         }
 
         .entry-content {
             color: #555;
+            line-height: 1.6;
             margin-bottom: 15px;
         }
 
         .entry-verse {
-            background: #f8f9fa;
-            padding: 15px;
+            background: #eef2f7;
+            padding: 10px;
             border-radius: 8px;
-            font-style: italic;
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.85rem;
+            color: #34495e;
         }
 
-        /* --- Modal --- */
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -545,174 +349,229 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            align-items: center;
+            background-color: rgba(0,0,0,0.5);
             justify-content: center;
-            padding: 20px;
-        }
-
-        .modal.active {
-            display: flex;
+            align-items: center;
         }
 
         .modal-content {
             background-color: white;
             padding: 0;
             border-radius: 12px;
-            box-shadow: var(--shadow-hover);
+            width: 90%;
             max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalFadeIn 0.3s ease;
-        }
-
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #dee2e6;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 25px;
-            border-bottom: 1px solid var(--border-color);
         }
 
         .modal-header h3 {
             margin: 0;
-            color: var(--secondary-color);
+            color: #2c3e50;
         }
 
         .close-modal {
             background: none;
             border: none;
-            font-size: 2rem;
-            color: #aaa;
+            font-size: 1.5rem;
             cursor: pointer;
-            line-height: 1;
+            color: #aaa;
         }
 
         .close-modal:hover {
-            color: var(--accent-color);
+            color: #333;
         }
 
         .modal-body {
             padding: 25px;
+            overflow-y: auto;
         }
 
-        /* --- Empty State & Loading --- */
-        .empty-state, .loading {
+        /* Login */
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .login-container h2 {
             text-align: center;
-            padding: 40px 20px;
-            color: #999;
+            margin-bottom: 30px;
+            color: #2c3e50;
         }
 
-        .empty-state svg, .loading svg {
-            width: 80px;
-            height: 80px;
+        .login-form .form-group {
             margin-bottom: 20px;
+        }
+
+        .login-form .form-actions {
+            justify-content: center;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        /* Quran Tab Styles */
+        .quran-controls {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .control-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            flex: 1;
+        }
+
+        .quran-nav {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-nav {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            flex: 1;
+        }
+
+        .btn-nav:hover:not(:disabled) {
+            background: #2980b9;
+        }
+
+        .btn-nav:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .quran-display {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 25px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .ayat-box {
+            text-align: center;
+        }
+
+        .ayat-box .surah-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .ayat-box .arabic {
+            font-size: 2rem;
+            line-height: 2.5;
+            font-family: 'Traditional Arabic', 'Arial', sans-serif;
+            margin-bottom: 25px;
+        }
+
+        .ayat-box .terjemahan {
+            font-style: italic;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 25px;
+        }
+
+        .ayat-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-small {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .btn-copy:hover {
+            background: #27ae60;
+        }
+
+        .btn-add-journal {
+            background: #f39c12;
+        }
+
+        .btn-add-journal:hover {
+            background: #e67e22;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #95a5a6;
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 15px;
             opacity: 0.5;
         }
 
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
         .loading-spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
             border-radius: 50%;
-            border-left-color: var(--primary-color);
-            animation: spin 1s ease infinite;
-            margin: 0 auto 15px;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
-        }
-
-        /* --- Error Message --- */
-        .error-message {
-            color: var(--accent-color);
-            background: #fbeaea;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none; /* Hidden by default */
-            border-left: 4px solid var(--accent-color);
-        }
-
-        /* --- Mobile Menu Toggle --- */
-        .menu-toggle {
-            display: none; /* Hidden on desktop */
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--primary-color);
-        }
-
-        /* --- Responsive Design --- */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .header {
-                padding: 12px 15px;
-            }
-
-            .header h1 {
-                font-size: 1.4rem;
-            }
-
-            .menu-toggle {
-                display: block; /* Show on mobile */
-            }
-
-            .main-content {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                flex: none;
-                width: 100%;
-                position: fixed;
-                top: 0;
-                left: -100%; /* Hide off-screen */
-                height: 100vh;
-                z-index: 999;
-                border-radius: 0;
-                transition: left 0.3s ease;
-                padding: 20px;
-                overflow-y: auto;
-            }
-
-            body.sidebar-open .sidebar {
-                left: 0; /* Slide in */
-            }
-
-            .content-area {
-                padding: 20px 15px;
-            }
-
-            .tabs {
-                overflow-x: auto; /* Allow horizontal scrolling for tabs if needed */
-            }
-
-            .form-actions {
-                flex-direction: column;
-            }
-
-            .btn, .btn-nav {
-                width: 100%;
-            }
-
-            .entries-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 5px;
-            }
         }
     </style>
 </head>
@@ -741,7 +600,6 @@
     <div class="container" id="appContainer" style="display: none;">
         <!-- Header -->
         <header class="header">
-            <button class="menu-toggle" id="menuToggle">☰</button>
             <h1>Portal Jurnal Harian</h1>
             <div class="user-info">
                 <span id="userDisplay">User</span>
@@ -753,7 +611,7 @@
         <!-- Main Content -->
         <div class="main-content">
             <!-- Sidebar -->
-            <aside class="sidebar" id="sidebar">
+            <aside class="sidebar">
                 <!-- Date Display -->
                 <div class="date-display">
                     <div class="hijri-date" id="hijriDay">--</div>
@@ -775,37 +633,22 @@
             <main class="content-area">
                 <!-- Tabs -->
                 <div class="tabs">
-                    <button class="tab active" data-tab="journal">Jurnal Saya</button>
-                    <button class="tab" data-tab="public">Catatan Umum</button>
+                    <button class="tab active" data-tab="journal">Jurnal</button>
                     <button class="tab" data-tab="quran">Al-Quran</button>
                 </div>
 
-                <!-- Journal Tab (Private) -->
+                <!-- Journal Tab -->
                 <div class="tab-content active" id="journal-tab">
                     <!-- Journal Form -->
                     <div class="journal-form">
                         <form id="journalForm">
                             <div class="form-group">
                                 <label for="datePicker">Pilih Tarikh</label>
-                                <div class="date-picker-wrapper">
-                                    <div class="date-picker-display" id="datePickerDisplay">
-                                        <span id="selectedDateText">Pilih tarikh...</span>
-                                        <span>📅</span>
-                                    </div>
-                                    <div class="calendar-modal" id="calendarModal"></div>
-                                </div>
-                                <input type="hidden" id="datePicker" required>
+                                <input type="date" id="datePicker" required>
                             </div>
                             <div class="form-group">
                                 <label for="journalTitle">Tajuk Catatan</label>
                                 <input type="text" id="journalTitle" placeholder="Masukkan tajuk catatan..." required>
-                            </div>
-                            <div class="form-group">
-                                <label for="journalVisibility">Visibiliti</label>
-                                <select id="journalVisibility">
-                                    <option value="private">Peribadi (Private)</option>
-                                    <option value="public">Awam (Public)</option>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="journalContent">Isi Catatan</label>
@@ -820,10 +663,10 @@
 
                     <!-- Entries -->
                     <div class="entries-header">
-                        <h3>Senarai Catatan Peribadi</h3>
-                        <div class="entry-count" id="entryCountPrivate">0 catatan</div>
+                        <h3>Senarai Catatan</h3>
+                        <div class="entry-count" id="entryCount">0 catatan</div>
                     </div>
-                    <div class="entries-container" id="entriesContainerPrivate">
+                    <div class="entries-container" id="entriesContainer">
                         <div class="empty-state">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -832,26 +675,8 @@
                                 <line x1="16" y1="17" x2="8" y2="17"></line>
                                 <polyline points="10 9 9 9 8 9"></polyline>
                             </svg>
-                            <p>Belum ada catatan peribadi</p>
+                            <p>Belum ada catatan</p>
                             <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mulakan menulis catatan pertama anda</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Public Tab -->
-                <div class="tab-content" id="public-tab">
-                    <div class="entries-header">
-                        <h3>Senarai Catatan Awam</h3>
-                        <div class="entry-count" id="entryCountPublic">0 catatan</div>
-                    </div>
-                    <div class="entries-container" id="entriesContainerPublic">
-                        <div class="empty-state">
-                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                                <circle cx="12" cy="12" r="3"></circle>
-                            </svg>
-                            <p>Belum ada catatan awam</p>
-                            <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam dari semua pengguna akan dipaparkan di sini</p>
                         </div>
                     </div>
                 </div>
@@ -952,15 +777,10 @@
         const logoutBtn = document.getElementById('logoutBtn');
         const userDisplay = document.getElementById('userDisplay');
         const userAvatar = document.getElementById('userAvatar');
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
         const hijriDay = document.getElementById('hijriDay');
         const hijriMonth = document.getElementById('hijriMonth');
         const hijriDayName = document.getElementById('hijriDayName');
         const datePicker = document.getElementById('datePicker');
-        const datePickerDisplay = document.getElementById('datePickerDisplay');
-        const selectedDateText = document.getElementById('selectedDateText');
-        const calendarModal = document.getElementById('calendarModal');
         const verseContent = document.getElementById('verseContent');
         const verseTranslation = document.getElementById('verseTranslation');
         const verseReference = document.getElementById('verseReference');
@@ -968,12 +788,9 @@
         const journalForm = document.getElementById('journalForm');
         const journalTitle = document.getElementById('journalTitle');
         const journalContent = document.getElementById('journalContent');
-        const journalVisibility = document.getElementById('journalVisibility');
         const clearBtn = document.getElementById('clearBtn');
-        const entriesContainerPrivate = document.getElementById('entriesContainerPrivate');
-        const entriesContainerPublic = document.getElementById('entriesContainerPublic');
-        const entryCountPrivate = document.getElementById('entryCountPrivate');
-        const entryCountPublic = document.getElementById('entryCountPublic');
+        const entriesContainer = document.getElementById('entriesContainer');
+        const entryCount = document.getElementById('entryCount');
         const entryModal = document.getElementById('entryModal');
         const modalTitle = document.getElementById('modalTitle');
         const modalBody = document.getElementById('modalBody');
@@ -992,7 +809,6 @@
         let selectedAyat = null;
         let currentSurah = null;
         let currentAyat = null;
-        let currentPickerDate = new Date(); // State for the custom date picker
 
         // Initialize app
         function init() {
@@ -1015,22 +831,7 @@
             journalForm.addEventListener('submit', saveJournalEntry);
             clearBtn.addEventListener('click', clearForm);
             closeModal.addEventListener('click', () => {
-                entryModal.classList.remove('active');
-            });
-            
-            // Mobile menu toggle
-            menuToggle.addEventListener('click', () => {
-                document.body.classList.toggle('sidebar-open');
-            });
-
-            // Close sidebar when clicking outside on mobile
-            document.addEventListener('click', (e) => {
-                if (window.innerWidth <= 768 && 
-                    !sidebar.contains(e.target) && 
-                    !menuToggle.contains(e.target) && 
-                    document.body.classList.contains('sidebar-open')) {
-                    document.body.classList.remove('sidebar-open');
-                }
+                entryModal.style.display = 'none';
             });
 
             // Tab switching
@@ -1047,127 +848,50 @@
                         content.classList.remove('active');
                     });
                     document.getElementById(`${tabName}-tab`).classList.add('active');
-
-                    // Display entries based on tab
-                    if (tabName === 'journal') {
-                        displayEntries('private');
-                    } else if (tabName === 'public') {
-                        displayEntries('public');
-                    }
                 });
             });
 
             // Initialize Quran controls
             initializeQuranControls();
 
-            // Initialize custom date picker
-            initializeCustomDatePicker();
+            // Initialize date picker and displays
+            initializeDatePicker();
 
             // Display entries
-            displayEntries('private');
+            displayEntries();
         }
 
-        // Initialize Custom Date Picker
-        function initializeCustomDatePicker() {
-            // Set initial date to today
-            updateDatePickerDisplay(currentPickerDate);
-            datePicker.value = currentPickerDate.toISOString().split('T')[0];
-
-            // Open calendar on display click
-            datePickerDisplay.addEventListener('click', () => {
-                calendarModal.classList.toggle('active');
-                if (calendarModal.classList.contains('active')) {
-                    renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
-                }
-            });
-
-            // Close calendar when clicking outside
-            document.addEventListener('click', (e) => {
-                if (!datePickerDisplay.contains(e.target) && !calendarModal.contains(e.target)) {
-                    calendarModal.classList.remove('active');
-                }
-            });
-        }
-
-        // Render calendar grid
-        function renderCalendar(year, month) {
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const daysInPrevMonth = new Date(year, month, 0).getDate();
+        // Initialize Date Picker and all related displays
+        function initializeDatePicker() {
+            // Set date picker to today's date
+            const today = new Date();
+            datePicker.value = today.toISOString().split('T')[0];
             
-            let html = `
-                <div class="calendar-header">
-                    <button class="calendar-nav" id="prevMonth">&lt;</button>
-                    <span>${hijriMonths[month]} ${year}</span>
-                    <button class="calendar-nav" id="nextMonth">&gt;</button>
-                </div>
-                <div class="calendar-grid">
-            `;
-            
-            // Day headers
-            const dayHeaders = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-            dayHeaders.forEach(day => {
-                html += `<div class="calendar-day-header">${day}</div>`;
+            // Add event listener for date change
+            datePicker.addEventListener('change', (e) => {
+                const selectedDate = new Date(e.target.value + 'T00:00:00'); // Ensure correct timezone handling
+                updateAllDateDisplays(selectedDate);
             });
 
-            // Previous month days
-            for (let i = firstDay - 1; i >= 0; i--) {
-                const day = daysInPrevMonth - i;
-                const date = new Date(year, month - 1, day);
-                const hijri = getHijriDate(date);
-                html += `<div class="calendar-day other-month" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
-            }
-
-            // Current month days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const hijri = getHijriDate(date);
-                const isSelected = date.toDateString() === currentPickerDate.toDateString();
-                html += `<div class="calendar-day ${isSelected ? 'selected' : ''}" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
-            }
-
-            // Next month days
-            const totalCells = firstDay + daysInMonth;
-            const nextMonthDays = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
-            for (let day = 1; day <= nextMonthDays; day++) {
-                const date = new Date(year, month + 1, day);
-                const hijri = getHijriDate(date);
-                html += `<div class="calendar-day other-month" data-date="${date.toISOString().split('T')[0]}">${day}<span class="hijri-small">${hijri.day}</span></div>`;
-            }
-
-            html += `</div>`;
-            calendarModal.innerHTML = html;
-
-            // Add event listeners to calendar days
-            document.querySelectorAll('.calendar-day:not(.other-month)').forEach(dayEl => {
-                dayEl.addEventListener('click', (e) => {
-                    const selectedDateStr = e.currentTarget.dataset.date;
-                    currentPickerDate = new Date(selectedDateStr + 'T00:00:00');
-                    updateDatePickerDisplay(currentPickerDate);
-                    datePicker.value = selectedDateStr;
-                    updateAllDateDisplays(currentPickerDate);
-                    calendarModal.classList.remove('active');
-                });
-            });
-
-            // Add event listeners to month navigation
-            document.getElementById('prevMonth').addEventListener('click', () => {
-                currentPickerDate.setMonth(currentPickerDate.getMonth() - 1);
-                renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
-            });
-
-            document.getElementById('nextMonth').addEventListener('click', () => {
-                currentPickerDate.setMonth(currentPickerDate.getMonth() + 1);
-                renderCalendar(currentPickerDate.getFullYear(), currentPickerDate.getMonth());
-            });
+            // Initial update for today's date
+            updateAllDateDisplays(today);
         }
 
-        // Update the display text of the date picker
-        function updateDatePickerDisplay(date) {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const gregorianStr = date.toLocaleDateString('ms-MY', options);
-            const hijriStr = getHijriDate(date).hijriString;
-            selectedDateText.textContent = `${gregorianStr} / ${hijriStr}`;
+        // Update all date-related displays and verse
+        function updateAllDateDisplays(date) {
+            // Update Hijri date display
+            const hijriDate = getHijriDate(date);
+            hijriDay.textContent = hijriDate.day;
+            hijriMonth.textContent = hijriDate.month;
+            hijriDayName.textContent = hijriDate.dayName;
+            
+            // Load Quran verse based on Hijri date (Rujukan Rububiyah)
+            currentVerse = getQuranVerseForDate(hijriDate);
+            
+            // Load actual verse from API
+            if (currentVerse.surah && currentVerse.ayat) {
+                loadVerseFromAPI(currentVerse.surah, currentVerse.ayat);
+            }
         }
 
         // Initialize Quran controls
@@ -1306,7 +1030,7 @@
                 day: 'numeric',
                 month: 'numeric',
                 year: 'numeric',
-                weekday: 'long',
+                weekday: 'long', // Get the weekday name
                 timeZone: 'Asia/Kuala_Lumpur'
             });
             let hijriParts = hijriFormatter.formatToParts(malaysiaTime);
@@ -1338,6 +1062,8 @@
         // Get Quran verse based on Hijri date (Rujukan Rububiyah)
         function getQuranVerseForDate(hijriDate) {
             const day = hijriDate.day;
+            
+            // The logic is now simply day:day
             const targetSurah = day;
             const targetAyat = day;
             
@@ -1367,23 +1093,6 @@
                     verseTranslation.textContent = "";
                     verseReference.textContent = "";
                 });
-        }
-
-        // Update all date-related displays and verse
-        function updateAllDateDisplays(date) {
-            // Update Hijri date display
-            const hijriDate = getHijriDate(date);
-            hijriDay.textContent = hijriDate.day;
-            hijriMonth.textContent = hijriDate.month;
-            hijriDayName.textContent = hijriDate.dayName;
-            
-            // Load Quran verse based on Hijri date (Rujukan Rububiyah)
-            currentVerse = getQuranVerseForDate(hijriDate);
-            
-            // Load actual verse from API
-            if (currentVerse.surah && currentVerse.ayat) {
-                loadVerseFromAPI(currentVerse.surah, currentVerse.ayat);
-            }
         }
 
         // Login handler
@@ -1429,7 +1138,6 @@
             
             const title = journalTitle.value.trim();
             const content = journalContent.value.trim();
-            const visibility = journalVisibility.value;
             const selectedDate = datePicker.value;
             
             if (!title || !content) {
@@ -1437,7 +1145,7 @@
                 return;
             }
             
-            const entryDate = new Date(selectedDate + 'T00:00:00');
+            const entryDate = new Date(selectedDate + 'T00:00:00'); // Ensure correct timezone handling
             const hijriDate = getHijriDate(entryDate);
             
             const entry = {
@@ -1446,8 +1154,6 @@
                 content: content,
                 date: entryDate.toISOString(),
                 hijriDate: hijriDate.hijriString,
-                visibility: visibility, // NEW: Add visibility
-                author: currentUser, // NEW: Add author
                 verse: currentVerse ? {
                     text: currentVerse.text,
                     translation: verseTranslation.textContent,
@@ -1463,7 +1169,7 @@
             clearForm();
             
             // Display entries
-            displayEntries(visibility); // Display based on the entry's visibility
+            displayEntries();
             
             // Show success message
             showNotification('Catatan berjaya disimpan!', 'success');
@@ -1496,55 +1202,32 @@
         function clearForm() {
             journalTitle.value = '';
             journalContent.value = '';
-            journalVisibility.value = 'private'; // Reset to default
         }
 
-        // Display journal entries with filter
-        function displayEntries(filter = 'private') {
-            const filteredEntries = journalEntries.filter(entry => entry.visibility === filter);
+        // Display journal entries
+        function displayEntries() {
+            entryCount.textContent = `${journalEntries.length} catatan`;
             
-            // Determine which container and count to update
-            let container, countElement, headerText;
-            if (filter === 'private') {
-                container = entriesContainerPrivate;
-                countElement = entryCountPrivate;
-                headerText = "Senarai Catatan Peribadi";
-            } else {
-                container = entriesContainerPublic;
-                countElement = entryCountPublic;
-                headerText = "Senarai Catatan Awam";
-            }
-
-            countElement.textContent = `${filteredEntries.length} catatan`;
-            
-            if (filteredEntries.length === 0) {
-                container.innerHTML = `
+            if (journalEntries.length === 0) {
+                entriesContainer.innerHTML = `
                     <div class="empty-state">
-                        ${filter === 'private' ? 
-                        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
                             <line x1="16" y1="13" x2="8" y2="13"></line>
                             <line x1="16" y1="17" x2="8" y2="17"></line>
                             <polyline points="10 9 9 9 8 9"></polyline>
                         </svg>
-                        <p>Belum ada catatan peribadi</p>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mulakan menulis catatan pertama anda</p>` :
-                        `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        <p>Belum ada catatan awam</p>
-                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Catatan awam dari semua pengguna akan dipaparkan di sini</p>`
-                        }
+                        <p>Belum ada catatan</p>
+                        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Mulakan menulis catatan pertama anda</p>
                     </div>
                 `;
                 return;
             }
             
-            container.innerHTML = '';
+            entriesContainer.innerHTML = '';
             
-            filteredEntries.forEach(entry => {
+            journalEntries.forEach(entry => {
                 const entryCard = document.createElement('div');
                 entryCard.className = 'entry-card';
                 
@@ -1557,7 +1240,7 @@
                         <div class="entry-date">${formattedDate} / ${entry.hijriDate}</div>
                         <div class="entry-actions">
                             <button onclick="viewEntry(${entry.id})">Lihat</button>
-                            ${entry.author === currentUser ? `<button onclick="deleteEntry(${entry.id})">Hapus</button>` : ''}
+                            <button onclick="deleteEntry(${entry.id})">Hapus</button>
                         </div>
                     </div>
                     <h4>${entry.title}</h4>
@@ -1568,10 +1251,9 @@
                         <div style="text-align: right; margin-top: 0.5rem; font-size: 0.8rem;">${entry.verse.reference}</div>
                     </div>
                     ` : ''}
-                    ${entry.author !== currentUser ? `<div style="margin-top: 10px; font-size: 0.85rem; color: #888;">Oleh: ${entry.author}</div>` : ''}
                 `;
                 
-                container.appendChild(entryCard);
+                entriesContainer.appendChild(entryCard);
             });
         }
 
@@ -1587,7 +1269,7 @@
             const formattedDate = entryDate.toLocaleDateString('ms-MY', options);
             
             modalBody.innerHTML = `
-                <p style="margin-bottom: 1rem; color: #666;">${formattedDate} / ${entry.hijriDate} | ${entry.visibility === 'public' ? 'Awam' : 'Peribadi'} ${entry.author !== currentUser ? `| Oleh: ${entry.author}` : ''}</p>
+                <p style="margin-bottom: 1rem; color: #666;">${formattedDate} / ${entry.hijriDate}</p>
                 <div style="margin-bottom: 1.5rem; white-space: pre-wrap;">${entry.content}</div>
                 ${entry.verse ? `
                 <div class="entry-verse">
@@ -1602,7 +1284,7 @@
                 ` : ''}
             `;
             
-            entryModal.classList.add('active');
+            entryModal.style.display = 'flex';
         }
 
         // Delete entry
@@ -1610,9 +1292,7 @@
             if (confirm('Adakah anda pasti ingin memadam catatan ini?')) {
                 journalEntries = journalEntries.filter(e => e.id !== id);
                 localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
-                // Re-display entries for the current active tab
-                const activeTab = document.querySelector('.tab.active').dataset.tab;
-                displayEntries(activeTab === 'public' ? 'public' : 'private');
+                displayEntries();
                 showNotification('Catatan berjaya dipadam.', 'success');
             }
         }
